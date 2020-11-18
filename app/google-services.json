@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "786275489232",
+    "firebase_url": "https://markattendance-8dc08.firebaseio.com",
+    "project_id": "markattendance-8dc08",
+    "storage_bucket": "markattendance-8dc08.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:786275489232:android:2aaf8eef80a84ca47d95d5",
+        "android_client_info": {
+          "package_name": "com.example1.markattendance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "786275489232-hjgaetbs472v9htvv417fj3tqvp8av8l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDASJg4KveF-LkvQJbePzJXjLDq_4leg7o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "786275489232-hjgaetbs472v9htvv417fj3tqvp8av8l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

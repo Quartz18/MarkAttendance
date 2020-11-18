@@ -1,0 +1,90 @@
+package com.example1.markattendance;
+
+import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
+
+public class SlideViewPagerAdapter extends PagerAdapter {
+    Context context;
+
+    public SlideViewPagerAdapter(Context context) {
+        this.context = context;
+    }
+
+    @Override
+    public int getCount() {
+        return 3;
+    }
+
+    @Override
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+        return view == object;
+    }
+
+    @NonNull
+    @Override
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+        View view = layoutInflater.inflate(R.layout.slide_screen,container,false);
+        ImageView logo = view.findViewById(R.id.imageView);
+        ImageView indicator1 = view.findViewById(R.id.indicator1);
+        ImageView indicator2 = view.findViewById(R.id.indicator2);
+        ImageView indicator3 = view.findViewById(R.id.indicator3);
+        TextView title = view.findViewById(R.id.title);
+        TextView desc = view.findViewById(R.id.desc);
+        Button btngetstarted = view.findViewById(R.id.btngetstarted);
+        Animation btnanim = AnimationUtils.loadAnimation(context,R.anim.btn_get_started_anim);
+        btngetstarted.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        });
+        switch (position)
+        {
+            case 0:
+                logo.setImageResource(R.drawable.signal1);
+                indicator1.setImageResource(R.drawable.indicator_selected);
+                indicator2.setImageResource(R.drawable.indicator_unselected);
+                indicator3.setImageResource(R.drawable.indicator_unselected);
+                title.setText("Class and batches");
+                break;
+            case 1:
+                logo.setImageResource(R.drawable.file1);
+                indicator1.setImageResource(R.drawable.indicator_unselected);
+                indicator2.setImageResource(R.drawable.indicator_selected);
+                indicator3.setImageResource(R.drawable.indicator_unselected);
+                title.setText("Attendance and Records");
+                break;
+            case 2:
+                logo.setImageResource(R.drawable.stat2);
+                indicator1.setImageResource(R.drawable.indicator_unselected);
+                indicator2.setImageResource(R.drawable.indicator_unselected);
+                indicator3.setImageResource(R.drawable.indicator_selected);
+                title.setText("Statistics");
+                btngetstarted.setVisibility(View.VISIBLE);
+                btngetstarted.setEnabled(true);
+                btngetstarted.setAnimation(btnanim);
+                break;
+        }
+        container.addView(view);
+        return view;
+    }
+
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        container.removeView((View) object);
+    }
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:left="@dimen/tab_spacing_half"
+        android:right="@dimen/tab_spacing_half"
+        android:bottom="@dimen/tab_spacing_half">
+
+        <shape>
+            <gradient
+                android:startColor="@color/dark_red"
+                android:endColor="@color/dark_red"
+                android:angle="270"></gradient>
+            <size android:height="30dp"
+                android:width="60dp" />
+            <corners
+                android:radius="60dp">
+            </corners>
+
+            <stroke
+                android:width="2dp"
+                android:color="@color/white">
+            </stroke>
+
+        </shape>
+
+    </item>
+
+</layer-list>
