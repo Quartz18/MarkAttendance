@@ -67,7 +67,8 @@ public class AddMembersDialog extends AppCompatDialogFragment {
                             final String userId = mAuth.getCurrentUser().getUid();
                             int x = document_name.indexOf(userId);
                             final String class_name = document_name.substring(0,x-1);
-                            db.collection("users").document(userId).collection("Class_List").document(class_name)
+                            db.collection("users").document(userId)
+                                    .collection("Class_List").document(class_name)
                                     .get()
                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override

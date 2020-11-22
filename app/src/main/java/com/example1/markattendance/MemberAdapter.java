@@ -108,7 +108,8 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
                                 String counter = document.getString("Counter");
                                 int counting = Integer.valueOf(counter) - 1;
                                 Map<String, Object> add_counter = new HashMap<>();
-                                DocumentReference counter_list = db.collection("users").document(userID).collection("Class_List").document(class_name);
+                                DocumentReference counter_list = db.collection("users").document(userID)
+                                        .collection("Class_List").document(class_name);
                                 add_counter.put("Counter",String.valueOf(counting));
                                 counter_list.update(add_counter);
                                 String past_records_string = document.getString("List");
@@ -132,7 +133,8 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
                 q = 1;
                 continue;
             }
-            db.collection("Records").document(class_name).collection(tags).document(String.valueOf(item_List.get(position).getMembers_number()))
+            db.collection("Records").document(class_name)
+                    .collection(tags).document(String.valueOf(item_List.get(position).getMembers_number()))
                     .delete()
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -146,7 +148,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(addMembers.getBaseContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(addMembers.getBaseContext(), "Deleted", Toast.LENGTH_SHORT).show();
 //                            mbatch.loadDataFromFirebase();
                     }
                 });

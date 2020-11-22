@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="90dp"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    android:id="@+id/past_subject_item">
+    android:layout_marginTop="5dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -20,27 +20,35 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:id="@+id/past_subject_id"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:id="@+id/user_number_item"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
                 android:paddingTop="15dp"
+                android:layout_marginLeft="5dp"
                 android:fontFamily="@font/alegreya"
                 android:textSize="20sp"
                 android:textAlignment="center"
-                android:hint="ID"/>
-
+                android:text="ID"/>
             <TextView
-                android:id="@+id/past_suject_name_item"
-                android:layout_width="290dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:id="@+id/user_name_item"
+                android:layout_width="260dp"
+                android:layout_height="match_parent"
+                android:paddingTop="15dp"
                 android:background="@color/white"
-                android:text="Subject name"
                 android:fontFamily="@font/alegreya"
+                android:text="Member"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/user_option_menu"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:paddingTop="15dp"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textAlignment="center"
+                android:text="&#8942;" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -63,7 +63,6 @@ public class TakingAttendance extends AppCompatActivity {
         subject_name = getIntent().getStringExtra("subject_name");
         int x = document_name.indexOf(userID);
         class_name = document_name.substring(0,x-1);
-        Toast.makeText(TakingAttendance.this,document_name+"\n"+subject_name+"\n"+class_name,Toast.LENGTH_SHORT).show();
         db.collection("users").document(userID).collection("Class_List")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -100,9 +99,8 @@ public class TakingAttendance extends AppCompatActivity {
         main_attendance_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                select_all_button.setChecked(false);
-                select_all_data();
                 getData();
+
             }
         });
 
@@ -140,6 +138,9 @@ public class TakingAttendance extends AppCompatActivity {
         selected_list = takingAttendanceAdapter.listOfSelectedValues();
         Log.d("Select All",selected_list.toString());
         dateToStr = DateFormat.getDateTimeInstance().format(date);
+        select_all_value =false;
+        select_all_button.setChecked(false);
+        loadMembersFromFirestore();
         settingMemberRecord();
 
     }

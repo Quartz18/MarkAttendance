@@ -93,10 +93,20 @@ public class LoginActivity extends AppCompatActivity {
         email.startAnimation(fromtop);
         textview.startAnimation(fromtop);
         paswrd.startAnimation(fromtop);
+        FirebaseUser user = mAuth.getCurrentUser();
 
-        if (mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(), HomeScreen.class));
-            finish();
+        if (user != null) {
+            if (mAuth.getCurrentUser().getUid().equals("8JRTM9p8XfWfbG4LhKZW6ypOUj92")){
+                startActivity(new Intent(LoginActivity.this, AdminPage.class));
+                finish();
+            }
+            else{
+                startActivity(new Intent(LoginActivity.this, HomeScreen.class));
+                finish();
+            }
+        }
+        else{
+            //Nothing
         }
 
         login_btn.setOnClickListener(new View.OnClickListener() {
@@ -117,11 +127,14 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful())
                                     {
-                                        Toast.makeText(LoginActivity.this, "User logged in!", Toast.LENGTH_SHORT).show();
-                                        FirebaseUser current_user=mAuth.getCurrentUser();
-                                        Toast.makeText(LoginActivity.this,current_user.getEmail(), Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(getApplicationContext(),HomeScreen.class));
-                                        finish();
+                                        if(mAuth.getCurrentUser().getUid().equals("8JRTM9p8XfWfbG4LhKZW6ypOUj92")){
+                                            startActivity(new Intent(LoginActivity.this, AdminPage.class));
+                                            finish();
+                                        }else{
+                                            Toast.makeText(LoginActivity.this, "User logged in!", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(getApplicationContext(),HomeScreen.class));
+                                            finish();
+                                        }
                                     }
                                     else
                                     {

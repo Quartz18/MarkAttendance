@@ -1,10 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.MarkAttendance" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.MarkAttendance" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/dark_red</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/red</item>
+        <item name="colorAccent">@color/dark_red</item>
     </style>
 
     <style name="SlideActivity" parent="Theme.AppCompat.Light.NoActionBar" />

@@ -87,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
                                                 Log.d("TAG","User Profile is created!");
                                             }
                                         });
-                                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                                        finish();
                                     } else {
                                         Log.w("Sign In", "Error", task.getException());
                                         Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();

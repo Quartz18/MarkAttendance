@@ -101,8 +101,9 @@ public class HomeScreen extends AppCompatActivity {
                 });
                 break;
             case R.id.log_out:
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }

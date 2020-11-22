@@ -49,7 +49,6 @@ public class Subjects_List extends AppCompatActivity {
         document_name = getIntent().getStringExtra("document_name");
         int x = document_name.indexOf(userID);
         class_name = document_name.substring(0,x-1);
-        Toast.makeText(Subjects_List.this,class_name,Toast.LENGTH_SHORT).show();
         db.collection("users").document(userID)
                 .collection("Class_List").document(class_name)
                 .collection("Subjects")
@@ -111,9 +110,10 @@ public class Subjects_List extends AppCompatActivity {
         addSubjectDialog.show(fragmentManager, "Add Members");
 
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         finish();
-        return false;
+        return super.onSupportNavigateUp();
     }
 }
