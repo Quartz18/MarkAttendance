@@ -5,9 +5,6 @@
     <item android:title="DashBoard"
         android:id="@+id/menu_item"
         android:icon="@drawable/ic_account"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
 
-    <item android:id="@+id/log_out"
-        android:title="Log Out"
-        app:showAsAction="never"/>
 </menu>

@@ -79,7 +79,7 @@ public class AdminPageAdapter extends RecyclerView.Adapter<AdminPageAdapter.View
         dailog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ///
+                //
             }
         });
     }

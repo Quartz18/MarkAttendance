@@ -27,7 +27,7 @@ public class SlideActivity extends AppCompatActivity {
 
         if (isOpenAlready())
         {
-            Intent intent = new Intent(com.example1.markattendance.SlideActivity.this,LoginActivity.class);
+            Intent intent = new Intent(SlideActivity.this,LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }

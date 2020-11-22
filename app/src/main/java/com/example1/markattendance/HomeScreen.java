@@ -9,6 +9,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,6 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -39,7 +44,7 @@ public class HomeScreen extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseFirestore db;
     DocumentReference acct;
-    String userID;
+    String userID, userName,userMail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +58,8 @@ public class HomeScreen extends AppCompatActivity {
         attendance = findViewById(R.id.attendance_frag);
         statistics = findViewById(R.id.statistics_frag);
         home_viewpager = findViewById(R.id.home_viewpager);
-
         HomeAdapter homeAdapter = new HomeAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, tabLayout.getTabCount());
         home_viewpager.setAdapter(homeAdapter);
-
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -88,25 +90,15 @@ public class HomeScreen extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_item:
-                db = FirebaseFirestore.getInstance();
-                mAuth = FirebaseAuth.getInstance();
-                userID = mAuth.getCurrentUser().getUid();
-                acct = db.collection("users").document(userID);
-                acct.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                        Toast.makeText(HomeScreen.this,
-                                "Account: "+value.getString("Email"),Toast.LENGTH_LONG).show();
-                    }
-                });
-                break;
-            case R.id.log_out:
-                mAuth = FirebaseAuth.getInstance();
-                mAuth.signOut();
+                Intent intent = new Intent(HomeScreen.this,Dashboard.class);
+                startActivity(intent);
+                finish();
                 break;
             default:
-                return super.onOptionsItemSelected(item);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

@@ -76,22 +76,8 @@ public class AdminPage extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_item:
-                db.collection("users").document(userID)
-                        .get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                Toast.makeText(AdminPage.this,
-                                        "Admin: "+documentSnapshot.getString("Email"),
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        });
-                break;
-            case R.id.log_out:
-                mAuth.signOut();
-                Intent i = new Intent(AdminPage.this,LoginActivity.class);
-                startActivity(i);
-                finish();
+                Intent intent = new Intent(AdminPage.this,Dashboard.class);
+                startActivity(intent);
                 break;
             default:
                 //Nothing
@@ -108,9 +94,6 @@ public class AdminPage extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for (DocumentSnapshot querySnapshot: task.getResult()){
                             Log.d("Users", querySnapshot.getString("Name"));
-                            if (userID.equals("8JRTM9p8XfWfbG4LhKZW6ypOUj92")){
-                                continue;
-                            }
                             Model_Batch model_batch = new Model_Batch(querySnapshot.getString("Name"),
                                     String.valueOf(1),
                                     querySnapshot.getId());

@@ -76,11 +76,11 @@ public class AddMembersDialog extends AppCompatDialogFragment {
                                             if (task.isSuccessful()) {
                                                 DocumentSnapshot document = task.getResult();
                                                 if (document.exists()) {
-                                                    counter = document.getString("Counter");
+                                                    counter = document.getString("count_of_students");
                                                     counting = Integer.valueOf(counter) + 1;
                                                     Map<String, Object> add_counter = new HashMap<>();
                                                     DocumentReference counter_list = db.collection("users").document(userId).collection("Class_List").document(class_name);
-                                                    add_counter.put("Counter",String.valueOf(counting));
+                                                    add_counter.put("count_of_students",String.valueOf(counting));
                                                     counter_list.update(add_counter);
 
                                                 } else {

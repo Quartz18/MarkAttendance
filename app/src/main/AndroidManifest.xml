@@ -17,24 +17,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MarkAttendance">
-        <activity android:name=".AdminPage"
-            android:label="Admin Page"/>
-        <activity android:name=".PastSubjectList"
-            android:label="Subject List"/>
-        <activity android:name=".ShowingStatistics"
-            android:label="Statistics"/>
-        <activity android:name=".Past_Attendance_Details"
-            android:label="Details"/>
-        <activity android:name=".Past_Attendance"
-            android:label="Records"/>
-        <activity android:name=".SubjectAttendList"
-            android:label="Subject List"/>
-        <activity android:name=".TakingAttendance"
-            android:label="Attendance"/>
-        <activity android:name=".Subjects_List"
-            android:label="Add Subject"/>
-        <activity android:name=".AddMembers"
-            android:label="Add Members"/>
+        <activity android:name=".Dashboard"
+            android:label="Dashboard"></activity>
+        <activity
+            android:name=".AdminPage"
+            android:label="Admin Page" />
+        <activity
+            android:name=".PastSubjectList"
+            android:label="Subject List" />
+        <activity
+            android:name=".ShowingStatistics"
+            android:label="Statistics" />
+        <activity
+            android:name=".Past_Attendance_Details"
+            android:label="Details" />
+        <activity
+            android:name=".Past_Attendance"
+            android:label="Records" />
+        <activity
+            android:name=".SubjectAttendList"
+            android:label="Subject List" />
+        <activity
+            android:name=".TakingAttendance"
+            android:label="Attendance" />
+        <activity
+            android:name=".Subjects_List"
+            android:label="Add Subject" />
+        <activity
+            android:name=".AddMembers"
+            android:label="Add Members" />
         <activity
             android:name=".HomeScreen"
             android:theme="@style/Home_screen" />

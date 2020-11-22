@@ -36,6 +36,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
     SignInButton signInButton;
     int RC_SIGN_IN = 0;
     GoogleSignInClient mGoogleSignInClient;
+    Date date = new Date();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,21 +95,6 @@ public class LoginActivity extends AppCompatActivity {
         email.startAnimation(fromtop);
         textview.startAnimation(fromtop);
         paswrd.startAnimation(fromtop);
-        FirebaseUser user = mAuth.getCurrentUser();
-
-        if (user != null) {
-            if (mAuth.getCurrentUser().getUid().equals("8JRTM9p8XfWfbG4LhKZW6ypOUj92")){
-                startActivity(new Intent(LoginActivity.this, AdminPage.class));
-                finish();
-            }
-            else{
-                startActivity(new Intent(LoginActivity.this, HomeScreen.class));
-                finish();
-            }
-        }
-        else{
-            //Nothing
-        }
 
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,6 +197,8 @@ public class LoginActivity extends AppCompatActivity {
             Map<String ,Object> user=new HashMap<>();
             user.put("Name", username);
             user.put("Email", email);
+            user.put("count_of_class",0);
+            user.put("List","");
             documentReference.set(user);
             mAuth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
@@ -231,5 +220,24 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this, HomeScreen.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            if (mAuth.getCurrentUser().getUid().equals("8JRTM9p8XfWfbG4LhKZW6ypOUj92")){
+                startActivity(new Intent(LoginActivity.this, AdminPage.class));
+                finish();
+            }
+            else{
+                startActivity(new Intent(LoginActivity.this, HomeScreen.class));
+                finish();
+            }
+        }
+        else{
+            //Nothing
+        }
     }
 }

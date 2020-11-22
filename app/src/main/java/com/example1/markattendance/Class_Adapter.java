@@ -60,7 +60,7 @@ public class Class_Adapter extends RecyclerView.Adapter<Class_Adapter.ViewHolder
             public void onClick(View v) {
                 //mbatch.startActivity(new Intent(mbatch.getContext(), AddMembers.class));
                 Intent intent = new Intent(class_fragment.getContext(),AddMembers.class);
-                String document_name = item_List.get(position).getBatch_name()+" "+item_List.get(position).getTotal_member();
+                String document_name = item_List.get(position).getCount_of_subjects()+" "+item_List.get(position).getTotal_member();
                 intent.putExtra("document_name",document_name);
                 class_fragment.startActivity(intent);
             }

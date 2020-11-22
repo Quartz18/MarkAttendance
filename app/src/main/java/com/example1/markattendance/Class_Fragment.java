@@ -5,9 +5,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +38,8 @@ public class Class_Fragment extends Fragment {
     FloatingActionButton add_class_btn;
     FirebaseFirestore db;
     FirebaseAuth mAuth;
-    DocumentReference documentReference;
-    String userID,user_name;
+    ArrayList<Model_Batch> item_List;
+    String userID,number_of_class;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -78,7 +80,20 @@ public class Class_Fragment extends Fragment {
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        loadDataFromFirebase();
+                        if (error!=null){
+                            Log.d("TAG","Error:"+error.getMessage());
+                        }
+                        else {
+                            item_List = new ArrayList<>();
+                            for (DocumentSnapshot querySnapshot : value) {
+                                number_of_class = querySnapshot.getString("count_of_class");
+                                Model_Batch model_batch = new Model_Batch(querySnapshot.getString("Name"),
+                                        userID,
+                                        querySnapshot.getId());
+                                item_List.add(model_batch);
+                            }
+                            batch_recyclerview.setAdapter(new Class_Adapter(item_List, Class_Fragment.this));
+                        }
                     }
                 });
     }
@@ -111,24 +126,12 @@ public class Class_Fragment extends Fragment {
         batch_recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
     }
     public void openDialog(){
+        Bundle args = new Bundle();
+        args.putString("document_name", number_of_class);
         AddClassDialog addClassDialog = new AddClassDialog();
+        addClassDialog.setArguments(args);
         addClassDialog.show(getChildFragmentManager(),"addClassDialog");
 
-    }
-    private void loadDataFromFirebase(){
-        final ArrayList<Model_Batch> item_List = new ArrayList<>();
-        db.collection("users").document(userID).collection("Class_List")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        for (DocumentSnapshot querySnapshot: task.getResult()){
-                            Model_Batch model_batch = new Model_Batch(querySnapshot.getId(),userID.toString(),querySnapshot.getString("count_of_subjects"));
-                            item_List.add(model_batch);
-                        }
-                        batch_recyclerview.setAdapter(new Class_Adapter(item_List, Class_Fragment.this));
-                    }
-                });
 
     }
 }

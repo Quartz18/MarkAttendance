@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore fStore;
     TextView textview,title;
     String userID;
+    Date date = new Date();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
                                         Map<String ,Object> user=new HashMap<>();
                                         user.put("Name", username.getText().toString());
                                         user.put("Email", email.getText().toString());
+                                        user.put("count_of_class",0);
+                                        user.put("List","");
                                         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
