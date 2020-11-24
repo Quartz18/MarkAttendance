@@ -16,12 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SubjectAttendListAdapter extends RecyclerView.Adapter<SubjectAttendListAdapter.ViewHolder> {
-    ArrayList<Model_Batch> item_List;
+    ArrayList<Model_Member> item_List;
     SubjectAttendList subjectAttendList;
     FirebaseAuth mAuth;
     String userID;
 
-    public SubjectAttendListAdapter(ArrayList<Model_Batch> item_List, SubjectAttendList subjectAttendList){
+    public SubjectAttendListAdapter(ArrayList<Model_Member> item_List, SubjectAttendList subjectAttendList){
         this.subjectAttendList = subjectAttendList;
         this.item_List = item_List;
     }
@@ -36,14 +36,14 @@ public class SubjectAttendListAdapter extends RecyclerView.Adapter<SubjectAttend
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.attendance_subject_id.setText(item_List.get(position).getTotal_member());
-        holder.attendance_subject_name_item.setText(item_List.get(position).getBatch_name());
+        holder.attendance_subject_id.setText(item_List.get(position).getMembers_name());
+        holder.attendance_subject_name_item.setText(item_List.get(position).getMembers_number());
         holder.attendance_subject_name_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(subjectAttendList.getApplicationContext(),TakingAttendance.class);
-                intent.putExtra("document_name",item_List.get(position).getCount_of_subjects());
-                intent.putExtra("subject_name",item_List.get(position).getBatch_name());
+                intent.putExtra("document_name",item_List.get(position).getMembers_device());
+                intent.putExtra("subject_name",item_List.get(position).getDocument_name());
                 openSubjectList(position);
             }
         });
@@ -54,8 +54,8 @@ public class SubjectAttendListAdapter extends RecyclerView.Adapter<SubjectAttend
     private void openSubjectList(int position){
         setUpFirebase();
         Context context = subjectAttendList.getApplicationContext();
-        String document_name = item_List.get(position).getCount_of_subjects()+" "+userID;
-        String subject_name = item_List.get(position).getBatch_name();
+        String document_name = item_List.get(position).getMembers_device()+" "+userID;
+        String subject_name = item_List.get(position).getDocument_name();
         Intent new_intent = new Intent(context,TakingAttendance.class);
         new_intent.putExtra("document_name",document_name);
         new_intent.putExtra("subject_name",subject_name);

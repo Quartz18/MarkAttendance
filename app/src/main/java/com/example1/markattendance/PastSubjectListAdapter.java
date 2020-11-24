@@ -1,6 +1,7 @@
 package com.example1.markattendance;
 
 import android.content.Intent;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 
 public class PastSubjectListAdapter extends RecyclerView.Adapter<PastSubjectListAdapter.ViewHolder> {
 
-    ArrayList<Model_Batch> item_List;
+    ArrayList<Model_Member> item_List;
     ArrayList<String> selectedValues;
     PastSubjectList pastSubjectList;
     FirebaseFirestore db;
@@ -25,7 +26,7 @@ public class PastSubjectListAdapter extends RecyclerView.Adapter<PastSubjectList
     DocumentReference documentReference;
     String userID,document_name;
 
-    public PastSubjectListAdapter(ArrayList<Model_Batch> item_List, PastSubjectList pastSubjectList){
+    public PastSubjectListAdapter(ArrayList<Model_Member> item_List, PastSubjectList pastSubjectList){
         this.item_List = item_List;
         this.pastSubjectList = pastSubjectList;
 
@@ -41,14 +42,14 @@ public class PastSubjectListAdapter extends RecyclerView.Adapter<PastSubjectList
     @Override
     public void onBindViewHolder(@NonNull PastSubjectListAdapter.ViewHolder holder, final int position) {
         setUpFirebase();
-        holder.past_subject_id.setText(item_List.get(position).getTotal_member());
-        holder.past_subject_name_item.setText(item_List.get(position).getBatch_name());
+        holder.past_subject_id.setText(item_List.get(position).getMembers_number());
+        holder.past_subject_name_item.setText(item_List.get(position).getMembers_name());
         holder.past_subject_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(pastSubjectList.getApplicationContext(), ShowingStatistics.class);
-                String document_name = item_List.get(position).getCount_of_subjects()+" "+userID;
-                String subject_name = item_List.get(position).getBatch_name();
+                String document_name = item_List.get(position).getMembers_device()+" "+userID;
+                String subject_name = item_List.get(position).getDocument_name();
                 intent.putExtra("document_name",document_name);
                 intent.putExtra("subject_name",subject_name);
                 pastSubjectList.startActivity(intent);

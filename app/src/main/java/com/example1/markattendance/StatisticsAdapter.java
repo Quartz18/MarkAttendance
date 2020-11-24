@@ -16,12 +16,12 @@ import java.util.List;
 
 public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.ViewHolder> {
 
-    List<Model_Batch> itemlist1;
+    List<Model_Member> itemlist1;
     Context mContext;
     String userID;
     FirebaseAuth mAuth;
 
-    public StatisticsAdapter(List<Model_Batch> itemlist, Context mContext) {
+    public StatisticsAdapter(List<Model_Member> itemlist, Context mContext) {
         this.itemlist1 = itemlist;
         this.mContext = mContext;
 
@@ -39,14 +39,14 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull StatisticsAdapter.ViewHolder holder, final int position) {
 
-        holder.batch_name.setText(itemlist1.get(position).getBatch_name());
-        holder.total_member.setText(itemlist1.get(position).getTotal_member());
+        holder.batch_name.setText(itemlist1.get(position).getMembers_number());
+        holder.total_member.setText(itemlist1.get(position).getMembers_name());
         mAuth = FirebaseAuth.getInstance();
         userID = mAuth.getCurrentUser().getUid();
         holder.go_to_tabs_items.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final int count_of_subjects = Integer.valueOf(itemlist1.get(position).getCount_of_subjects());
+                final int count_of_subjects = Integer.valueOf(itemlist1.get(position).getMembers_device());
                 if (count_of_subjects>0){
                     openSubjectList(position);
                 }else {
@@ -59,14 +59,14 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
 
     private void openSubjectList(int position){
         Intent intent = new Intent(mContext,PastSubjectList.class);
-        String document_name = itemlist1.get(position).getBatch_name();
+        String document_name = itemlist1.get(position).getDocument_name();
         intent.putExtra("document_name",document_name);
         mContext.startActivity(intent);
 
     }
     private void openStudentList(int position){
         Intent intent = new Intent(mContext,ShowingStatistics.class);
-        String document_name = itemlist1.get(position).getBatch_name()+" "+userID;
+        String document_name = itemlist1.get(position).getDocument_name()+" "+userID;
         String subject_name = "None";
         intent.putExtra("document_name",document_name);
         intent.putExtra("subject_name",subject_name);

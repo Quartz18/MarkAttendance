@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -29,9 +30,11 @@ import java.util.Map;
 
 public class AddSubjectDialog extends AppCompatDialogFragment {
     EditText subject_name_text;
-    String counter,connect_data,ipAddress,macAddress;
+    String counter,document_name,dateToStr,userID;
     int counting;
     Date date = new Date();
+    FirebaseAuth mAuth;
+    FirebaseFirestore db;
 
     @NonNull
     @Override
@@ -40,8 +43,21 @@ public class AddSubjectDialog extends AppCompatDialogFragment {
         LayoutInflater inflator = getActivity().getLayoutInflater();
         View view = inflator.inflate(R.layout.dialog_add_subject, null);
         Bundle mArgs = getArguments();
-        final String document_name = mArgs.getString("document_name");
-        final String dateToStr = DateFormat.getDateTimeInstance().format(date);
+        document_name = mArgs.getString("document_name");
+        dateToStr = DateFormat.getDateTimeInstance().format(date);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        userID = mAuth.getCurrentUser().getUid();
+        db.collection("users").document(userID)
+                .collection("Class_List").document(document_name)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        counter = documentSnapshot.getString("count_of_subjects");
+                        counting = Integer.valueOf(counter) + 1;
+                    }
+                });
         builder.setView(view)
                 .setTitle("Add Subject")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -59,35 +75,15 @@ public class AddSubjectDialog extends AppCompatDialogFragment {
                             Toast.makeText(getContext(),"Enter Subject name",Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            final FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                            final String userID = mAuth.getCurrentUser().getUid();
-                            db.collection("users").document(userID).collection("Class_List").document(document_name)
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                DocumentSnapshot document = task.getResult();
-                                                if (document.exists()) {
-                                                    counter = document.getString("count_of_subjects");
-                                                    counting = Integer.valueOf(counter) + 1;
-                                                    Map<String, Object> add_counter = new HashMap<>();
-                                                    DocumentReference counter_list = db.collection("users").document(userID)
-                                                            .collection("Class_List").document(document_name);
-                                                    add_counter.put("count_of_subjects",String.valueOf(counting));
-                                                    counter_list.update(add_counter);
-
-                                                } else {
-                                                    Log.d("TAG", "No such document");
-                                                }
-                                            }
-                                        }
-                                    });
+                            Map<String, Object> add_counter = new HashMap<>();
+                            DocumentReference counter_list = db.collection("users").document(userID)
+                                    .collection("Class_List").document(document_name);
+                            add_counter.put("count_of_subjects",String.valueOf(counting));
+                            counter_list.update(add_counter);
                             Map<String, Object> add_class_name = new HashMap<>();
                             DocumentReference subject_list = db.collection("users").document(userID)
                                     .collection("Class_List").document(document_name)
-                                    .collection("Subjects").document(name);
+                                    .collection("Subjects").document(String.valueOf(counting));
                             add_class_name.put("Name",name);
                             add_class_name.put("List","");
                             add_class_name.put("count_of_records","0");

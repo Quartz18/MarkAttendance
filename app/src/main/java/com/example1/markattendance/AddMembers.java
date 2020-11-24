@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +35,7 @@ public class AddMembers extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseAuth mAuth;
     String userID;
+    DocumentSnapshot number_of_class;
     public String document_name;
     Boolean onCLicked = false;
 
@@ -155,9 +157,10 @@ public class AddMembers extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for (DocumentSnapshot querySnapshot: task.getResult()){
-                            Model_Member model_member = new Model_Member(querySnapshot.getId(),
+                            Model_Member model_member = new Model_Member(querySnapshot.getString("member_id"),
                                     querySnapshot.get("member_name").toString(),
-                                    querySnapshot.get("device_name").toString());
+                                    querySnapshot.getId(),
+                                    document_name);
                             item_List.add(model_member);
                         }
                         member_recyclerview.setAdapter(new MemberAdapter(item_List, AddMembers.this));

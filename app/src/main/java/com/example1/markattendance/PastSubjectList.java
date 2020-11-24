@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class PastSubjectList extends AppCompatActivity {
     RecyclerView past_subject_list_recyclerview;
-    ArrayList<Model_Batch> item_List;
+    ArrayList<Model_Member> item_List;
     FirebaseFirestore db;
     FirebaseAuth mAuth;
     DocumentReference documentReference;
@@ -68,9 +68,12 @@ public class PastSubjectList extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         int x = 1;
                         for (DocumentSnapshot querySnapshot: task.getResult()){
-                            Model_Batch model_batch = new Model_Batch(querySnapshot.getId(),String.valueOf(x),document_name);
+                            Model_Member model_member = new Model_Member(String.valueOf(x),
+                                    querySnapshot.getString("Name"),
+                                    document_name,
+                                    querySnapshot.getId());
                             x = x+1;
-                            item_List.add(model_batch);
+                            item_List.add(model_member);
                         }
                         past_subject_list_recyclerview.setAdapter(new PastSubjectListAdapter(item_List, PastSubjectList.this));
                     }

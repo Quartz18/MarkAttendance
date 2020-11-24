@@ -36,6 +36,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -192,13 +193,15 @@ public class LoginActivity extends AppCompatActivity {
             String userID = account.getId();
             String username = account.getDisplayName();
             String email = account.getEmail();
+            final String dateToStr = DateFormat.getDateTimeInstance().format(date);
             DocumentReference documentReference = FirebaseFirestore.getInstance()
                     .collection("users").document(userID);
             Map<String ,Object> user=new HashMap<>();
             user.put("Name", username);
             user.put("Email", email);
-            user.put("count_of_class",0);
+            user.put("count_of_class","0");
             user.put("List","");
+            user.put("Date",dateToStr);
             documentReference.set(user);
             mAuth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override

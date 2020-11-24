@@ -27,7 +27,7 @@ public class ShowingStatistics extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseAuth mAuth;
     ShowingStatisticsAdapter showingStatisticsAdapter;
-    int count_of_records,difference;
+    int count_of_records,difference,total_records;
     String document_name, subject_name, userID,class_name,record_list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +54,16 @@ public class ShowingStatistics extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (count_of_records == 0)
+                        {
+                            total_records = 1;
+                        }
+                        else {
+                            total_records = count_of_records;
+                        }
                         for (DocumentSnapshot querySnapshot: task.getResult()){
-                            float counting = Float.valueOf(querySnapshot.getString("counting"))/Float.valueOf(count_of_records)*100;
-                            Model_Statistics model_statistics = new Model_Statistics(querySnapshot.getId(),
+                            float counting = Float.valueOf(querySnapshot.getString("counting"))/Float.valueOf(total_records)*100;
+                            Model_Statistics model_statistics = new Model_Statistics(querySnapshot.getString("member_id"),
                                     querySnapshot.get("member_name").toString(),
                                     String.format("%.02f",counting)+"%\n"+querySnapshot.getString("counting")+"/"+count_of_records,
                                     document_name,
@@ -83,7 +90,8 @@ public class ShowingStatistics extends AppCompatActivity {
                         if (error!=null){
                             return;
                         }
-                        count_of_records = Integer.valueOf(value.getString("count_of_records"));
+
+                        count_of_records = Integer.parseInt(value.getString("count_of_records"));
                         record_list = value.getString("List");
                         item_List.clear();
                         if (subject_name.equals("None")){
@@ -97,6 +105,13 @@ public class ShowingStatistics extends AppCompatActivity {
     }
 
     private void loadSubjectDataFromFirebase() {
+        if (count_of_records == 0)
+        {
+            total_records = 1;
+        }
+        else {
+            total_records = count_of_records;
+        }
         db.collection("users").document(userID)
                 .collection("Class_List").document(class_name)
                 .collection("Subjects").document(subject_name)
@@ -104,7 +119,7 @@ public class ShowingStatistics extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        difference = count_of_records - Integer.valueOf(documentSnapshot.getString("count_of_records"));;
+                        difference = count_of_records - Integer.valueOf(documentSnapshot.getString("count_of_records"));
                         count_of_records = Integer.valueOf(documentSnapshot.getString("count_of_records"));
                         record_list = documentSnapshot.getString("List");
                     }
@@ -116,8 +131,8 @@ public class ShowingStatistics extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for (DocumentSnapshot querySnapshot: task.getResult()){
                             int count_of_member = Integer.valueOf(querySnapshot.getString("counting")) - difference;
-                            float counting = Float.valueOf(count_of_member)/Float.valueOf(count_of_records)*100;
-                            Model_Statistics model_statistics = new Model_Statistics(querySnapshot.getId(),
+                            float counting = Float.valueOf(count_of_member)/Float.valueOf(total_records)*100;
+                            Model_Statistics model_statistics = new Model_Statistics(querySnapshot.getString("member_id"),
                                     querySnapshot.get("member_name").toString(),
                                     String.format("%.02f",counting)+"%\n"+String.valueOf(count_of_member)+"/"+count_of_records,
                                     document_name,

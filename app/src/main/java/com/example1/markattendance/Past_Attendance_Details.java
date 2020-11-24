@@ -79,7 +79,7 @@ public class Past_Attendance_Details extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for (DocumentSnapshot querySnapshot: task.getResult()){
-                            Model_Past_Records model_past_records = new Model_Past_Records(record_name,querySnapshot.getId(),
+                            Model_Past_Records model_past_records = new Model_Past_Records(record_name,querySnapshot.getString("member_id"),
                                     querySnapshot.get("member_name").toString(),
                                     querySnapshot.get("member_attended").toString());
                             item_List.add(model_past_records);

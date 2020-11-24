@@ -55,7 +55,7 @@ public class SubjectAttendList extends AppCompatActivity {
     }
 
     private void loadSubjectFromFirebase(){
-        ArrayList<Model_Batch> item_List = new ArrayList<>();
+        ArrayList<Model_Member> item_List = new ArrayList<>();
         db.collection("users").document(userID)
                 .collection("Class_List").document(document_name)
                 .collection("Subjects")
@@ -65,11 +65,12 @@ public class SubjectAttendList extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         int q = 1;
                         for (DocumentSnapshot documentSnapshot: task.getResult()){
-                            Model_Batch model_batch = new Model_Batch(documentSnapshot.getId().toString(),
+                            Model_Member model_member = new Model_Member(documentSnapshot.getString("Name"),
                                     String.valueOf(q),
-                                    document_name);
+                                    document_name,
+                                    documentSnapshot.getId());
                             q = q+1;
-                            item_List.add(model_batch);
+                            item_List.add(model_member);
                         }
                         subject_attend_Recyclerview.setAdapter(new SubjectAttendListAdapter(item_List,SubjectAttendList.this));
                     }

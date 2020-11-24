@@ -1,6 +1,7 @@
 package com.example1.markattendance;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -75,17 +76,23 @@ public class Past_Attendance extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         past_records_string = documentSnapshot.getString("List");
-                        String[] list1 = past_records_string.split("-");
-                        List<String> list_of_past_records = Arrays.asList(list1);
-                        int q =0;
-                        for (String tags : list_of_past_records){
-                            if (q== 0){
-                                q = 1;
-                                continue;
-                            }
-                            Model_Past_Records model_past_records = new Model_Past_Records(tags,String.valueOf(q),document_name,"None");
-                            item_List.add(model_past_records);
-                            q = q+1;
+                        if (past_records_string.equals("")){
+                            //Do nothing
+                        }
+                        else{
+                            String[] list1 = past_records_string.split("-");
+                            List<String> list_of_past_records = Arrays.asList(list1);
+                            int q =0;
+                            for (String tags : list_of_past_records){
+                                if (q== 0){
+                                    q = 1;
+                                    continue;
+                                }
+                                Model_Past_Records model_past_records = new Model_Past_Records(tags,String.valueOf(q),document_name,"None");
+                                item_List.add(model_past_records);
+                                q = q+1;
+                        }
+
                         }
                         past_attendance_recyclerview.setAdapter(new PastAttendanceAdapter(item_List, Past_Attendance.this));
                     }

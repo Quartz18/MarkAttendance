@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -75,7 +76,7 @@ public class Class_Fragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Toast.makeText(getContext(),mAuth.getCurrentUser().getUid(),Toast.LENGTH_SHORT).show();
+
         db.collection("users").document(userID).collection("Class_List")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -86,7 +87,6 @@ public class Class_Fragment extends Fragment {
                         else {
                             item_List = new ArrayList<>();
                             for (DocumentSnapshot querySnapshot : value) {
-                                number_of_class = querySnapshot.getString("count_of_class");
                                 Model_Batch model_batch = new Model_Batch(querySnapshot.getString("Name"),
                                         userID,
                                         querySnapshot.getId());
@@ -126,10 +126,8 @@ public class Class_Fragment extends Fragment {
         batch_recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
     }
     public void openDialog(){
-        Bundle args = new Bundle();
-        args.putString("document_name", number_of_class);
+
         AddClassDialog addClassDialog = new AddClassDialog();
-        addClassDialog.setArguments(args);
         addClassDialog.show(getChildFragmentManager(),"addClassDialog");
 
 

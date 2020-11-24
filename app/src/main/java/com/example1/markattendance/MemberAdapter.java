@@ -1,5 +1,6 @@
 package com.example1.markattendance;
 
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -70,6 +71,14 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId())
                         {
+                            case R.id.edit_member:
+                                Bundle args = new Bundle();
+                                args.putString("id_member", item_List.get(position).getMembers_device());
+                                args.putString("document_name", item_List.get(position).getDocument_name());
+                                Edit_Member editMember = new Edit_Member();
+                                editMember.setArguments(args);
+                                editMember.show(addMembers.getSupportFragmentManager(),"addClassDialog");
+                                break;
                             case R.id.delete_member:
 //                                item_list.remove(position);
                                 deleteSelectedRow(position);
@@ -94,9 +103,9 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
     }
 
     private void deleteSelectedRow(final int position){
-        String id = item_List.get(position).getMembers_number();
-        int x = addMembers.document_name.indexOf(userID);
-        class_name = addMembers.document_name.substring(0,x-1);
+        String id = item_List.get(position).getMembers_device();
+        int x = item_List.get(position).document_name.indexOf(userID);
+        class_name = item_List.get(position).document_name.substring(0,x-1);
         db.collection("users").document(userID).collection("Class_List").document(class_name)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -105,12 +114,12 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                String counter = document.getString("Counter");
+                                String counter = document.getString("count_of_students");
                                 int counting = Integer.valueOf(counter) - 1;
                                 Map<String, Object> add_counter = new HashMap<>();
                                 DocumentReference counter_list = db.collection("users").document(userID)
                                         .collection("Class_List").document(class_name);
-                                add_counter.put("Counter",String.valueOf(counting));
+                                add_counter.put("count_of_students",String.valueOf(counting));
                                 counter_list.update(add_counter);
                                 String past_records_string = document.getString("List");
                                 String[] list1 = past_records_string.split("-");
@@ -134,7 +143,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
                 continue;
             }
             db.collection("Records").document(class_name)
-                    .collection(tags).document(String.valueOf(item_List.get(position).getMembers_number()))
+                    .collection(tags).document(String.valueOf(item_List.get(position).getMembers_device()))
                     .delete()
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -143,7 +152,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
                         }
                     });
         }
-        db.collection(addMembers.document_name).document(item_List.get(position).getMembers_number())
+        db.collection(addMembers.document_name).document(item_List.get(position).getMembers_device())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

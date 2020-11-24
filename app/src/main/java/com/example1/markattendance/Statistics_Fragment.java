@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class Statistics_Fragment extends Fragment {
 
     RecyclerView statistics_recyclerview;
-    ArrayList<Model_Batch> item_List = new ArrayList<Model_Batch>();
+    ArrayList<Model_Member> item_List = new ArrayList<Model_Member>();
     FirebaseFirestore db;
     FirebaseAuth mAuth;
     DocumentReference documentReference;
@@ -98,9 +98,10 @@ public class Statistics_Fragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for (DocumentSnapshot querySnapshot: task.getResult()){
                             //Model_Batch model_batch = new Model_Batch(querySnapshot.getId(),"70");
-                            item_List.add(new Model_Batch(querySnapshot.getId(),
-                                    querySnapshot.getString("Counter"),
-                                    querySnapshot.getString("count_of_subjects")));
+                            item_List.add(new Model_Member(querySnapshot.getString("Name"),
+                                    querySnapshot.getString("count_of_students"),
+                                    querySnapshot.getString("count_of_subjects"),
+                                    querySnapshot.getId()));
                         }
                         statistics_recyclerview.setAdapter(new StatisticsAdapter(item_List, getContext()));
                     }

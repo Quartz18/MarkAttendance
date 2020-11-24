@@ -73,7 +73,7 @@ public class Subjects_List extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for (DocumentSnapshot querySnapshot: task.getResult()){
-                            Model_Batch model_batch = new Model_Batch(querySnapshot.getId(),"0",class_name);
+                            Model_Batch model_batch = new Model_Batch(querySnapshot.getString("Name"),querySnapshot.getId(),class_name);
                             item_List.add(model_batch);
                         }
                         subject_list_recyclerview.setAdapter(new SubjectListAdapter(item_List, Subjects_List.this));

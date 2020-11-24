@@ -32,10 +32,8 @@ import java.util.ArrayList;
 public class Attendance_Fragment extends Fragment {
 
     RecyclerView attendance_recyclerview;
-
     FirebaseFirestore db;
     FirebaseAuth mAuth;
-    DocumentReference documentReference;
     String userID;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -102,17 +100,18 @@ public class Attendance_Fragment extends Fragment {
     }
 
     private void loadDataFromFirebase(){
-        ArrayList<Model_Batch> item_List = new ArrayList<Model_Batch>();
+        ArrayList<Model_Member> item_List = new ArrayList<Model_Member>();
         db.collection("users").document(userID).collection("Class_List")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for (DocumentSnapshot querySnapshot: task.getResult()){
-                            Model_Batch model_batch = new Model_Batch(querySnapshot.getId(),
-                                    querySnapshot.getString("Counter"),
-                                    querySnapshot.getString("count_of_subjects"));
-                            item_List.add(model_batch);
+                            Model_Member model_member = new Model_Member(querySnapshot.getString("Name"),
+                                    querySnapshot.getString("count_of_students"),
+                                    querySnapshot.getString("count_of_subjects"),
+                                    querySnapshot.getId());
+                            item_List.add(model_member);
                         }
                         attendance_recyclerview.setAdapter(new AttendanceAdapter(item_List, getContext()));
                     }

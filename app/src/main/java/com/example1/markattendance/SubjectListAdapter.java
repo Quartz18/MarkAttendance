@@ -1,5 +1,6 @@
 package com.example1.markattendance;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,6 +58,14 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId())
                         {
+                            case R.id.edit_subject:
+                                Bundle args = new Bundle();
+                                args.putString("subject_name", item_List.get(position).getTotal_member());
+                                args.putString("class_name", item_List.get(position).getCount_of_subjects());
+                                Edit_Subject editSubject = new Edit_Subject();
+                                editSubject.setArguments(args);
+                                editSubject.show(subjects_list.getSupportFragmentManager(),"addClassDialog");
+                                break;
                             case R.id.delete_subject:
                                 deleteSelectedRow(position);
                                 break;
@@ -72,7 +81,7 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
     }
 
     private void deleteSelectedRow(final int position) {
-        subject_name = item_List.get(position).getBatch_name();
+        subject_name = item_List.get(position).getTotal_member();
         class_name = item_List.get(position).getCount_of_subjects();
         db.collection("users").document(userID)
                 .collection("Class_List").document(class_name)

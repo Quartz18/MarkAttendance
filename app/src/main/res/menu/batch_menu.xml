@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
+    <item android:id="@+id/edit_class"
+        android:title="Edit"
+        app:showAsAction="never"/>
     <item android:id="@+id/delete_class"
         android:title="Delete"
         app:showAsAction="never"/>

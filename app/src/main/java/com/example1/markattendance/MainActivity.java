@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 String txtemail = email.getText().toString();
                 String txtpassword = paswrd.getText().toString();
                 String txtusername = username.getText().toString();
+                final String dateToStr = DateFormat.getDateTimeInstance().format(date);
                 if (TextUtils.isEmpty(txtemail) || TextUtils.isEmpty(txtpassword) || TextUtils.isEmpty(txtusername)) {
                     Toast.makeText(MainActivity.this, "Fill all the Entries!", Toast.LENGTH_SHORT).show();
                 } else if (txtpassword.length() < 6) {
@@ -83,8 +85,9 @@ public class MainActivity extends AppCompatActivity {
                                         Map<String ,Object> user=new HashMap<>();
                                         user.put("Name", username.getText().toString());
                                         user.put("Email", email.getText().toString());
-                                        user.put("count_of_class",0);
+                                        user.put("count_of_class","0");
                                         user.put("List","");
+                                        user.put("Date",dateToStr);
                                         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {

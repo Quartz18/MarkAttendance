@@ -1,6 +1,7 @@
 package com.example1.markattendance;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -23,7 +25,9 @@ import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Class_Adapter extends RecyclerView.Adapter<Class_Adapter.ViewHolder> {
 
@@ -76,6 +80,13 @@ public class Class_Adapter extends RecyclerView.Adapter<Class_Adapter.ViewHolder
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId())
                         {
+                            case R.id.edit_class:
+                                Bundle args = new Bundle();
+                                args.putString("class_id", item_List.get(position).getCount_of_subjects());
+                                Edit_CLass editCLass = new Edit_CLass();
+                                editCLass.setArguments(args);
+                                editCLass.show(class_fragment.getFragmentManager(),"addClassDialog");
+                                break;
                             case R.id.delete_class:
 //                                item_list.remove(position);
                                 getListing(position);
@@ -99,7 +110,24 @@ public class Class_Adapter extends RecyclerView.Adapter<Class_Adapter.ViewHolder
     }
     public void getListing(final int position){
         db.collection("users").document(userID)
-                .collection("Class_List").document(item_List.get(position).getBatch_name())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        int count_of_class = Integer.parseInt(documentSnapshot.getString("count_of_class")) -1;
+                        String list_of_class = documentSnapshot.getString("List");
+                        String new_list_of_class = "-"+item_List.get(position).getCount_of_subjects();
+                        list_of_class = list_of_class.replaceAll(new_list_of_class,"");
+                        Map<String, Object> counting_class = new HashMap<>();
+                        DocumentReference class_list = db.collection("users").document(userID);
+                        counting_class.put("count_of_class",String.valueOf(count_of_class));
+                        counting_class.put("List",list_of_class);
+                        class_list.update(counting_class);
+
+                    }
+                });
+        db.collection("users").document(userID)
+                .collection("Class_List").document(item_List.get(position).getCount_of_subjects())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -114,7 +142,7 @@ public class Class_Adapter extends RecyclerView.Adapter<Class_Adapter.ViewHolder
 
     }
     private void deleteSelectedRow(int position){
-        class_name =  item_List.get(position).getBatch_name()+" "+ userID;
+        class_name =  item_List.get(position).getCount_of_subjects()+" "+ userID;
         db.collection(class_name)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -141,7 +169,7 @@ public class Class_Adapter extends RecyclerView.Adapter<Class_Adapter.ViewHolder
                     }
                 });
         db.collection("users").document(userID)
-                .collection("Class_List").document(item_List.get(position).getBatch_name())
+                .collection("Class_List").document(item_List.get(position).getCount_of_subjects())
                 .collection("Subjects")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -168,7 +196,7 @@ public class Class_Adapter extends RecyclerView.Adapter<Class_Adapter.ViewHolder
                     }
                 });
         db.collection("users").document(userID)
-                .collection("Class_List").document(item_List.get(position).getBatch_name())
+                .collection("Class_List").document(item_List.get(position).getCount_of_subjects())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
