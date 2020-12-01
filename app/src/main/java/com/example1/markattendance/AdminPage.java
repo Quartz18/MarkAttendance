@@ -92,12 +92,17 @@ public class AdminPage extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        int found =1;
                         for (DocumentSnapshot querySnapshot: task.getResult()){
                             Log.d("Users", querySnapshot.getString("Name"));
+                            if (found == 3){
+                                found =1;
+                            }
                             Model_Batch model_batch = new Model_Batch(querySnapshot.getString("Name"),
                                     String.valueOf(1),
-                                    querySnapshot.getId());
+                                    querySnapshot.getId(),found);
                             item_List.add(model_batch);
+                            found = found +1;
                         }
                         Log.d("Users", item_List.toString());
                         admin_recyclerview.setAdapter(new AdminPageAdapter(item_List, AdminPage.this));

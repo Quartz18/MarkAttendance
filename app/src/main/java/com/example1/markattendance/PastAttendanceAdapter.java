@@ -44,6 +44,15 @@ public class PastAttendanceAdapter extends RecyclerView.Adapter<PastAttendanceAd
     public void onBindViewHolder(@NonNull final PastAttendanceAdapter.ViewHolder holder, final int position) {
 
         setUpFirebase();
+        if (item_List.get(position).getFound() == 1){
+            holder.past_records_go_to_details.setBackgroundResource(R.drawable.item_colour_1);
+        }
+        else if (item_List.get(position).getFound() == 2){
+            holder.past_records_go_to_details.setBackgroundResource(R.drawable.item_colour_2);
+        }
+        else {
+            holder.past_records_go_to_details.setBackgroundResource(R.drawable.item_colour_3);
+        }
         selectedValues = new ArrayList<String>();
         holder.past_record_name.setText(item_List.get(position).getPast_record_name());
         holder.past_record_count.setText(item_List.get(position).getMember_id());
@@ -77,7 +86,7 @@ public class PastAttendanceAdapter extends RecyclerView.Adapter<PastAttendanceAd
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            past_records_go_to_details = itemView.findViewById(R.id.past_records_go_to_details);
+            past_records_go_to_details = itemView.findViewById(R.id.item_list6);
             past_record_count = itemView.findViewById(R.id.past_attendance_id);
             past_record_name = itemView.findViewById(R.id.past_attendance_name);
 

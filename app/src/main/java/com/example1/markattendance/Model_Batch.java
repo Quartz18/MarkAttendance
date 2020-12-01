@@ -5,11 +5,21 @@ public class Model_Batch {
     String batch_name;
     String total_member;
     String count_of_subjects;
+    int found;
 
-    public Model_Batch(String batch_name, String total_member, String count_of_subjects) {
+    public Model_Batch(String batch_name, String total_member, String count_of_subjects, int found) {
         this.batch_name = batch_name;
         this.total_member = total_member;
         this.count_of_subjects = count_of_subjects;
+        this.found = found;
+    }
+
+    public int getFound() {
+        return found;
+    }
+
+    public void setFound(int found) {
+        this.found = found;
     }
 
     public String getBatch_name() {

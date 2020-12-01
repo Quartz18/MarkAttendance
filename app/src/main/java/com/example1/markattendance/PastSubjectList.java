@@ -66,14 +66,18 @@ public class PastSubjectList extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        int x = 1;
+                        int x = 1,found =1;
                         for (DocumentSnapshot querySnapshot: task.getResult()){
+                            if (found ==4){
+                                found = 1;
+                            }
                             Model_Member model_member = new Model_Member(String.valueOf(x),
                                     querySnapshot.getString("Name"),
                                     document_name,
-                                    querySnapshot.getId());
+                                    querySnapshot.getId(),found);
                             x = x+1;
                             item_List.add(model_member);
+                            found = found + 1;
                         }
                         past_subject_list_recyclerview.setAdapter(new PastSubjectListAdapter(item_List, PastSubjectList.this));
                     }

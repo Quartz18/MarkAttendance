@@ -61,15 +61,20 @@ public class ShowingStatistics extends AppCompatActivity {
                         else {
                             total_records = count_of_records;
                         }
+                        int found = 1;
                         for (DocumentSnapshot querySnapshot: task.getResult()){
+                            if (found==4){
+                                found = 1;
+                            }
                             float counting = Float.valueOf(querySnapshot.getString("counting"))/Float.valueOf(total_records)*100;
                             Model_Statistics model_statistics = new Model_Statistics(querySnapshot.getString("member_id"),
                                     querySnapshot.get("member_name").toString(),
                                     String.format("%.02f",counting)+"%\n"+querySnapshot.getString("counting")+"/"+count_of_records,
                                     document_name,
                                     record_list,
-                                    querySnapshot.getString("stats_list"));
+                                    querySnapshot.getString("stats_list"),found);
                             item_List.add(model_statistics);
+                            found = found + 1;
                         }
                         showing_statistics_recyclerview.setAdapter(new ShowingStatisticsAdapter(item_List, ShowingStatistics.this));
                     }
@@ -129,7 +134,11 @@ public class ShowingStatistics extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        int found=1;
                         for (DocumentSnapshot querySnapshot: task.getResult()){
+                            if (found == 4){
+                                found = 1;
+                            }
                             int count_of_member = Integer.valueOf(querySnapshot.getString("counting")) - difference;
                             float counting = Float.valueOf(count_of_member)/Float.valueOf(total_records)*100;
                             Model_Statistics model_statistics = new Model_Statistics(querySnapshot.getString("member_id"),
@@ -137,8 +146,9 @@ public class ShowingStatistics extends AppCompatActivity {
                                     String.format("%.02f",counting)+"%\n"+String.valueOf(count_of_member)+"/"+count_of_records,
                                     document_name,
                                     record_list,
-                                    querySnapshot.getString("stats_list"));
+                                    querySnapshot.getString("stats_list"),found);
                             item_List.add(model_statistics);
+                            found = found + 1;
                         }
                         showing_statistics_recyclerview.setAdapter(new ShowingStatisticsAdapter(item_List, ShowingStatistics.this));
                     }

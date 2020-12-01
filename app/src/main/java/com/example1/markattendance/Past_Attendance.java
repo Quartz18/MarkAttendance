@@ -82,15 +82,22 @@ public class Past_Attendance extends AppCompatActivity {
                         else{
                             String[] list1 = past_records_string.split("-");
                             List<String> list_of_past_records = Arrays.asList(list1);
-                            int q =0;
+                            int q =0,found = 1;
                             for (String tags : list_of_past_records){
                                 if (q== 0){
                                     q = 1;
                                     continue;
                                 }
-                                Model_Past_Records model_past_records = new Model_Past_Records(tags,String.valueOf(q),document_name,"None");
+                                if (found == 4){
+                                    found = 1;
+                                }
+                                Model_Past_Records model_past_records = new Model_Past_Records(tags,String.valueOf(q),
+                                        document_name,
+                                        "None",
+                                        found);
                                 item_List.add(model_past_records);
                                 q = q+1;
+                                found = found + 1;
                         }
 
                         }
@@ -125,15 +132,21 @@ public class Past_Attendance extends AppCompatActivity {
                         past_records_string = documentSnapshot.getString("List");
                         String[] list1 = past_records_string.split("-");
                         List<String> list_of_past_records = Arrays.asList(list1);
-                        int q =0;
+                        int q =0,found =1;
                         for (String tags : list_of_past_records){
                             if (q== 0){
                                 q = 1;
                                 continue;
                             }
-                            Model_Past_Records model_past_records = new Model_Past_Records(tags,String.valueOf(q),document_name,"None");
+                            if (found == 4){
+                                found = 1;
+                            }
+                            Model_Past_Records model_past_records = new Model_Past_Records(tags,String.valueOf(q),
+                                    document_name,
+                                    "None",found);
                             item_List.add(model_past_records);
                             q = q+1;
+                            found = found +1;
                         }
                         past_attendance_recyclerview.setAdapter(new PastAttendanceAdapter(item_List, Past_Attendance.this));
                     }

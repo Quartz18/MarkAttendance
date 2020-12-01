@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 String txtusername = username.getText().toString();
                 final String dateToStr = DateFormat.getDateTimeInstance().format(date);
                 if (TextUtils.isEmpty(txtemail) || TextUtils.isEmpty(txtpassword) || TextUtils.isEmpty(txtusername)) {
-                    Toast.makeText(MainActivity.this, "Fill all the Entries!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Fill all the fields correctly!", Toast.LENGTH_SHORT).show();
                 } else if (txtpassword.length() < 6) {
                     paswrd.setError("Password should be more than 6 characters.");
                     return;
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                                         finish();
                                     } else {
                                         Log.w("Sign In", "Error", task.getException());
-                                        Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MainActivity.this, "Enter a valid Email id", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });

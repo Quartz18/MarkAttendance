@@ -106,12 +106,18 @@ public class Attendance_Fragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        int found =1;
                         for (DocumentSnapshot querySnapshot: task.getResult()){
+                            if (found == 4){
+                                found = 1;
+                            }
                             Model_Member model_member = new Model_Member(querySnapshot.getString("Name"),
                                     querySnapshot.getString("count_of_students"),
                                     querySnapshot.getString("count_of_subjects"),
-                                    querySnapshot.getId());
+                                    querySnapshot.getId(),
+                                    found);
                             item_List.add(model_member);
+                            found = found + 1;
                         }
                         attendance_recyclerview.setAdapter(new AttendanceAdapter(item_List, getContext()));
                     }

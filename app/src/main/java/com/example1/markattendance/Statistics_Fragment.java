@@ -96,12 +96,16 @@ public class Statistics_Fragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        int found =1;
                         for (DocumentSnapshot querySnapshot: task.getResult()){
-                            //Model_Batch model_batch = new Model_Batch(querySnapshot.getId(),"70");
+                            if (found == 4){
+                                found = 1;
+                            }
                             item_List.add(new Model_Member(querySnapshot.getString("Name"),
                                     querySnapshot.getString("count_of_students"),
                                     querySnapshot.getString("count_of_subjects"),
-                                    querySnapshot.getId()));
+                                    querySnapshot.getId(),found));
+                            found = found +1;
                         }
                         statistics_recyclerview.setAdapter(new StatisticsAdapter(item_List, getContext()));
                     }

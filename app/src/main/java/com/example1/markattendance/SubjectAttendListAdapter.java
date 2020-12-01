@@ -36,6 +36,16 @@ public class SubjectAttendListAdapter extends RecyclerView.Adapter<SubjectAttend
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+        if (item_List.get(position).getFound() == 1){
+            holder.subject_Attend_item.setBackgroundResource(R.drawable.item_colour_1);
+        }
+        else if (item_List.get(position).getFound() == 2){
+            holder.subject_Attend_item.setBackgroundResource(R.drawable.item_colour_2);
+        }
+        else {
+            holder.subject_Attend_item.setBackgroundResource(R.drawable.item_colour_3);
+        }
         holder.attendance_subject_id.setText(item_List.get(position).getMembers_name());
         holder.attendance_subject_name_item.setText(item_List.get(position).getMembers_number());
         holder.attendance_subject_name_item.setOnClickListener(new View.OnClickListener() {
@@ -77,11 +87,13 @@ public class SubjectAttendListAdapter extends RecyclerView.Adapter<SubjectAttend
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView attendance_subject_id;
         TextView attendance_subject_name_item;
+        View subject_Attend_item;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
             attendance_subject_id = itemView.findViewById(R.id.attendance_subject_id);
             attendance_subject_name_item = itemView.findViewById(R.id.attendance_subject_name_item);
+            subject_Attend_item = itemView.findViewById(R.id.item_list7);
         }
     }
 

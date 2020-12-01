@@ -68,7 +68,7 @@ public class AddClassDialog extends AppCompatDialogFragment {
                         String name = class_name_text.getText().toString();
                         if(TextUtils.isEmpty(name))
                         {
-                            Toast.makeText(getContext(),"Enter class name",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(),"Enter the class name",Toast.LENGTH_SHORT).show();
                         }
                         else{
                             int class_number = Integer.parseInt(class_id)+1;

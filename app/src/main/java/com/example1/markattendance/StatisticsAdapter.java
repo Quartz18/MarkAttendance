@@ -39,6 +39,15 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull StatisticsAdapter.ViewHolder holder, final int position) {
 
+        if (itemlist1.get(position).getFound() == 1){
+            holder.go_to_tabs_items.setBackgroundResource(R.drawable.item_colour_1);
+        }
+        else if (itemlist1.get(position).getFound() == 2){
+            holder.go_to_tabs_items.setBackgroundResource(R.drawable.item_colour_2);
+        }
+        else {
+            holder.go_to_tabs_items.setBackgroundResource(R.drawable.item_colour_3);
+        }
         holder.batch_name.setText(itemlist1.get(position).getMembers_number());
         holder.total_member.setText(itemlist1.get(position).getMembers_name());
         mAuth = FirebaseAuth.getInstance();
@@ -85,7 +94,7 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
         View go_to_tabs_items;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            batch_name = itemView.findViewById(R.id.batch_name);
+            batch_name = itemView.findViewById(R.id.tab_name);
             total_member = itemView.findViewById(R.id.total_member);
             go_to_tabs_items = itemView.findViewById(R.id.go_to_tabs_items);
         }

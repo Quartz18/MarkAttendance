@@ -9,7 +9,11 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout5"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/subject_list_recyclerview"
@@ -22,13 +26,13 @@
         android:id="@+id/subject_add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="@color/dark_red"
+        android:backgroundTint="@color/red"
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/coordinatorLayout2"
+        app:layout_constraintTop_toTopOf="@+id/coordinatorLayout5"
+        app:layout_constraintVertical_bias="0.92"
         app:srcCompat="@drawable/ic_floating_button_add_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

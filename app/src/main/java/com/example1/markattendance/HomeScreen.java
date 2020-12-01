@@ -50,6 +50,8 @@ public class HomeScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+        mAuth = FirebaseAuth.getInstance();
+        Toast.makeText(HomeScreen.this,mAuth.getCurrentUser().getUid(),Toast.LENGTH_LONG).show();
         toolbar = findViewById(R.id.home_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Attendance Taker");
@@ -92,7 +94,6 @@ public class HomeScreen extends AppCompatActivity {
             case R.id.menu_item:
                 Intent intent = new Intent(HomeScreen.this,Dashboard.class);
                 startActivity(intent);
-                finish();
                 break;
             default:
                 break;

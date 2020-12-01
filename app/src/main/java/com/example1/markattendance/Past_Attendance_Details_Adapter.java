@@ -22,8 +22,7 @@ public class Past_Attendance_Details_Adapter extends RecyclerView.Adapter<Past_A
     Past_Attendance_Details past_attendance_details;
     FirebaseFirestore db;
     FirebaseAuth mAuth;
-    DocumentReference documentReference;
-    String userID,document_name;
+    String userID;
 
     public Past_Attendance_Details_Adapter(ArrayList<Model_Past_Records> item_List, Past_Attendance_Details past_attendance_details) {
         this.item_List = item_List;
@@ -44,6 +43,15 @@ public class Past_Attendance_Details_Adapter extends RecyclerView.Adapter<Past_A
     public void onBindViewHolder(@NonNull final Past_Attendance_Details_Adapter.ViewHolder holder, final int position) {
 
         setUpFirebase();
+        if (item_List.get(position).getFound() == 1){
+            holder.item_list5.setBackgroundResource(R.drawable.item_colour_1);
+        }
+        else if (item_List.get(position).getFound() == 2){
+            holder.item_list5.setBackgroundResource(R.drawable.item_colour_2);
+        }
+        else {
+            holder.item_list5.setBackgroundResource(R.drawable.item_colour_3);
+        }
         selectedValues = new ArrayList<String>();
         final int member_id = Integer.valueOf(item_List.get(position).getMember_id());
         holder.attendance_member_id.setText(String.valueOf(item_List.get(position).getMember_id()));
@@ -75,13 +83,14 @@ public class Past_Attendance_Details_Adapter extends RecyclerView.Adapter<Past_A
 
         TextView attendance_member_id,getAttendance_member_name;
         CheckBox attendance_member_checkbox;
+        View item_list5;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             attendance_member_id = itemView.findViewById(R.id.attendance_member_id);
             getAttendance_member_name = itemView.findViewById(R.id.attendance_member_name);
             attendance_member_checkbox = itemView.findViewById(R.id.attendance_member_checkbox);
-
+            item_list5 = itemView.findViewById(R.id.item_list5);
         }
     }
 }

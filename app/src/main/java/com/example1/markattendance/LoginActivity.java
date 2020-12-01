@@ -34,6 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DateFormat;
@@ -46,35 +47,36 @@ public class LoginActivity extends AppCompatActivity {
     Button login_btn;
     Animation frombtn, fromtop;
     EditText email, paswrd;
-    TextView textview,logged_in, forgot_psd,orview;
+    TextView textview,logged_in, forgot_psd;
     CardView google_cardview;
-    View line1,line2;
     private FirebaseAuth mAuth;
+    FirebaseFirestore db;
     SignInButton signInButton;
     int RC_SIGN_IN = 0;
     GoogleSignInClient mGoogleSignInClient;
     Date date = new Date();
+    String userID, username, user_email, dateToStr;
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            startActivity(new Intent(LoginActivity.this, HomeScreen.class));
+            finish();
+
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        login_btn = findViewById(R.id.login_btn);
-        logged_in = findViewById(R.id.logged);
-        email = findViewById(R.id.login_email);
-        paswrd = findViewById(R.id.login_password);
-        textview = findViewById(R.id.textView2);
-        forgot_psd =findViewById(R.id.forgot_psd);
-        google_cardview = findViewById(R.id.cardView);
-
+        setUpWidget();
+        getAnimation();
         mAuth = FirebaseAuth.getInstance();
-        frombtn = AnimationUtils.loadAnimation(this, R.anim.btn_anim);
-        fromtop = AnimationUtils.loadAnimation(this, R.anim.fromtop);
-        login_btn.startAnimation(frombtn);
-        google_cardview.startAnimation(frombtn);
-        signInButton = findViewById(R.id.sign_in_button);
+        db = FirebaseFirestore.getInstance();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("786275489232-hjgaetbs472v9htvv417fj3tqvp8av8l.apps.googleusercontent.com")
+                .requestIdToken("963358575455-h6ul90gluen8dom3ae1fksf8o5h7emf0.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(LoginActivity.this, gso);
@@ -84,19 +86,12 @@ public class LoginActivity extends AppCompatActivity {
                 signIn();
             }
         });
-        logged_in.startAnimation(frombtn);
-        signInButton.startAnimation(frombtn);
-        forgot_psd.startAnimation(frombtn);
         logged_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
             }
         });
-        email.startAnimation(fromtop);
-        textview.startAnimation(fromtop);
-        paswrd.startAnimation(fromtop);
-
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,26 +103,21 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else
                 {
-
                     mAuth.signInWithEmailAndPassword(txtemail, txtpassword)
                             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful())
                                     {
-                                        if(mAuth.getCurrentUser().getUid().equals("8JRTM9p8XfWfbG4LhKZW6ypOUj92")){
-                                            startActivity(new Intent(LoginActivity.this, AdminPage.class));
-                                            finish();
-                                        }else{
-                                            Toast.makeText(LoginActivity.this, "User logged in!", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(getApplicationContext(),HomeScreen.class));
-                                            finish();
-                                        }
+                                        Toast.makeText(LoginActivity.this, "User logged in!", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(getApplicationContext(),HomeScreen.class));
+                                        finish();
                                     }
                                     else
                                     {
                                         Log.w("Log In", "Error",task.getException());
-                                        Toast.makeText(LoginActivity.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                                        String txtemail=email.getText().toString();
+                                        Toast.makeText(LoginActivity.this,"User with "+txtemail+" does not exist.",Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -147,18 +137,23 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String mail = resetMail.getText().toString();
-                        mAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(LoginActivity.this,"Reset Link Sent to Your Email.",Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(LoginActivity.this,"Error! Reset Link is not Sent. " +e.getMessage(),Toast.LENGTH_SHORT).show();
+                        if (TextUtils.isEmpty(mail)){
+                            Toast.makeText(LoginActivity.this,"Enter a valid Email id!",Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            mAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(LoginActivity.this,"Reset Link Sent to Your Email.",Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(LoginActivity.this,"Error! Reset Link is not Sent. " +e.getMessage(),Toast.LENGTH_SHORT).show();
 
-                            }
-                        });
+                                }
+                            });
+                        }
                     }
                 });
                 passwordResetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -190,28 +185,18 @@ public class LoginActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             AuthCredential authCredential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-            String userID = account.getId();
-            String username = account.getDisplayName();
-            String email = account.getEmail();
-            final String dateToStr = DateFormat.getDateTimeInstance().format(date);
-            DocumentReference documentReference = FirebaseFirestore.getInstance()
-                    .collection("users").document(userID);
-            Map<String ,Object> user=new HashMap<>();
-            user.put("Name", username);
-            user.put("Email", email);
-            user.put("count_of_class","0");
-            user.put("List","");
-            user.put("Date",dateToStr);
-            documentReference.set(user);
             mAuth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    startActivity(new Intent(getApplicationContext(),HomeScreen.class));
+                    GoogleSignInAccount account = null;
+                    try {
+                        account = completedTask.getResult(ApiException.class);
+                        getUpdatedValues(account);
+                    } catch (ApiException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
-//
-//            // Signed in successfully, show authenticated UI.
-//            updateUI(account);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -219,28 +204,61 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this,"Failed",Toast.LENGTH_LONG).show();
         }
     }
-    private void updateUI(GoogleSignInAccount account) {
-        Intent intent = new Intent(LoginActivity.this, HomeScreen.class);
-        startActivity(intent);
-        finish();
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            if (mAuth.getCurrentUser().getUid().equals("8JRTM9p8XfWfbG4LhKZW6ypOUj92")){
-                startActivity(new Intent(LoginActivity.this, AdminPage.class));
-                finish();
+    public void getUpdatedValues(GoogleSignInAccount account){
+
+        userID = mAuth.getCurrentUser().getUid();
+        username = account.getDisplayName();
+        user_email = account.getEmail();
+        dateToStr = DateFormat.getDateTimeInstance().format(date);
+        db.collection("users").document(userID)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    if (task.getResult().exists()){
+                        startActivity(new Intent(getApplicationContext(),HomeScreen.class));
+                        finish();
+                    }
+                    else {
+                        DocumentReference documentReference = db
+                                .collection("users").document(userID);
+                        Map<String ,Object> user=new HashMap<>();
+                        user.put("Name", username);
+                        user.put("Email", user_email);
+                        user.put("count_of_class","0");
+                        user.put("List","");
+                        user.put("Date",dateToStr);
+                        documentReference.set(user);
+                        startActivity(new Intent(getApplicationContext(),HomeScreen.class));
+                        finish();
+                    }
+                }
             }
-            else{
-                startActivity(new Intent(LoginActivity.this, HomeScreen.class));
-                finish();
-            }
-        }
-        else{
-            //Nothing
-        }
+        });
+
+    }
+    public void getAnimation(){
+        frombtn = AnimationUtils.loadAnimation(this, R.anim.btn_anim);
+        fromtop = AnimationUtils.loadAnimation(this, R.anim.fromtop);
+        login_btn.startAnimation(frombtn);
+        google_cardview.startAnimation(frombtn);
+        logged_in.startAnimation(frombtn);
+        signInButton.startAnimation(frombtn);
+        forgot_psd.startAnimation(frombtn);
+        email.startAnimation(fromtop);
+        textview.startAnimation(fromtop);
+        paswrd.startAnimation(fromtop);
+
+    }
+    public void setUpWidget(){
+        login_btn = findViewById(R.id.login_btn);
+        logged_in = findViewById(R.id.logged);
+        email = findViewById(R.id.login_email);
+        paswrd = findViewById(R.id.login_password);
+        textview = findViewById(R.id.textView2);
+        forgot_psd =findViewById(R.id.forgot_psd);
+        google_cardview = findViewById(R.id.cardView);
+        signInButton = findViewById(R.id.sign_in_button);
     }
 }

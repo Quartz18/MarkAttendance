@@ -1,6 +1,9 @@
 package com.example1.markattendance;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,13 +61,23 @@ public class Class_Adapter extends RecyclerView.Adapter<Class_Adapter.ViewHolder
     public void onBindViewHolder(@NonNull final Class_Adapter.ViewHolder holder, final int position) {
 
         setUpFirebase();
+        if (item_List.get(position).getFound() == 1){
+            holder.item_list2.setBackgroundResource(R.drawable.item_colour_1);
+        }
+        else if (item_List.get(position).getFound() == 2){
+            holder.item_list2.setBackgroundResource(R.drawable.item_colour_2);
+        }
+        else {
+            holder.item_list2.setBackgroundResource(R.drawable.item_colour_3);
+        }
+
         holder.batch_name.setText(item_List.get(position).getBatch_name());
         holder.batch_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //mbatch.startActivity(new Intent(mbatch.getContext(), AddMembers.class));
                 Intent intent = new Intent(class_fragment.getContext(),AddMembers.class);
-                String document_name = item_List.get(position).getCount_of_subjects()+" "+item_List.get(position).getTotal_member();
+                String document_name = item_List.get(position).getCount_of_subjects()+" "+userID;
                 intent.putExtra("document_name",document_name);
                 class_fragment.startActivity(intent);
             }
@@ -88,9 +101,7 @@ public class Class_Adapter extends RecyclerView.Adapter<Class_Adapter.ViewHolder
                                 editCLass.show(class_fragment.getFragmentManager(),"addClassDialog");
                                 break;
                             case R.id.delete_class:
-//                                item_list.remove(position);
-                                getListing(position);
-//                                notifyDataSetChanged();
+                                getAlertDialog(position);
                                 break;
                             default:
                                 break;
@@ -101,6 +112,25 @@ public class Class_Adapter extends RecyclerView.Adapter<Class_Adapter.ViewHolder
                 popupMenu.show();
             }
         });
+    }
+
+    private void getAlertDialog(int position){
+        AlertDialog.Builder alert_dialog = new AlertDialog.Builder(class_fragment.getContext());
+        alert_dialog.setTitle("Are you sure?");
+        alert_dialog.setMessage("Deleting "+item_List.get(position).getBatch_name()+" class will result in completely removing all the details of the class.");
+        alert_dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                getListing(position);
+            }
+        }).setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alertDialog = alert_dialog.create();
+        alertDialog.show();
     }
 
     private void setUpFirebase() {
@@ -250,10 +280,12 @@ public class Class_Adapter extends RecyclerView.Adapter<Class_Adapter.ViewHolder
 
         TextView batch_name;
         public TextView option_menu;
+        View item_list2;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             batch_name = itemView.findViewById(R.id.batch_name);
             option_menu = itemView.findViewById(R.id.option_menu);
+            item_list2 = itemView.findViewById(R.id.item_list2);
         }
     }
 }

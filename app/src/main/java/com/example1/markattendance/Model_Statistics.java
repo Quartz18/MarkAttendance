@@ -2,14 +2,24 @@ package com.example1.markattendance;
 
 public class Model_Statistics {
     String member_id, member_name,member_ratio, document_name, class_name, subject_name;
+    int found;
 
-    public Model_Statistics(String member_id, String member_name, String member_ratio, String document_name, String class_name, String subject_name) {
+    public Model_Statistics(String member_id, String member_name, String member_ratio, String document_name, String class_name, String subject_name, int found) {
         this.member_id = member_id;
         this.member_name = member_name;
         this.member_ratio = member_ratio;
         this.document_name = document_name;
         this.class_name = class_name;
         this.subject_name = subject_name;
+        this.found = found;
+    }
+
+    public int getFound() {
+        return found;
+    }
+
+    public void setFound(int found) {
+        this.found = found;
     }
 
     public String getMember_id() {

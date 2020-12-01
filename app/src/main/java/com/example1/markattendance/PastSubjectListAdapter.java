@@ -42,6 +42,15 @@ public class PastSubjectListAdapter extends RecyclerView.Adapter<PastSubjectList
     @Override
     public void onBindViewHolder(@NonNull PastSubjectListAdapter.ViewHolder holder, final int position) {
         setUpFirebase();
+        if (item_List.get(position).getFound() == 1){
+            holder.past_subject_item.setBackgroundResource(R.drawable.item_colour_1);
+        }
+        else if (item_List.get(position).getFound() == 2){
+            holder.past_subject_item.setBackgroundResource(R.drawable.item_colour_2);
+        }
+        else {
+            holder.past_subject_item.setBackgroundResource(R.drawable.item_colour_3);
+        }
         holder.past_subject_id.setText(item_List.get(position).getMembers_number());
         holder.past_subject_name_item.setText(item_List.get(position).getMembers_name());
         holder.past_subject_item.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +86,7 @@ public class PastSubjectListAdapter extends RecyclerView.Adapter<PastSubjectList
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             past_subject_id = itemView.findViewById(R.id.past_subject_id);
-            past_subject_name_item = itemView.findViewById(R.id.past_suject_name_item);
+            past_subject_name_item = itemView.findViewById(R.id.past_subject_name_item);
             past_subject_item = itemView.findViewById(R.id.past_subject_item);
         }
     }

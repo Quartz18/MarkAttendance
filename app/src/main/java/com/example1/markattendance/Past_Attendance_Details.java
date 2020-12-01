@@ -78,11 +78,16 @@ public class Past_Attendance_Details extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        int found =1;
                         for (DocumentSnapshot querySnapshot: task.getResult()){
+                            if (found == 4){
+                                found = 1;
+                            }
                             Model_Past_Records model_past_records = new Model_Past_Records(record_name,querySnapshot.getString("member_id"),
                                     querySnapshot.get("member_name").toString(),
-                                    querySnapshot.get("member_attended").toString());
+                                    querySnapshot.get("member_attended").toString(),found);
                             item_List.add(model_past_records);
+                            found = found + 1;
                         }
                         past_attendance_details_recyclerview.setAdapter(past_attendance_details_adapter);
                     }

@@ -2,6 +2,9 @@ package com.example1.markattendance;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -94,7 +97,6 @@ public class AddMembers extends AppCompatActivity {
         subject_list_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AddMembers.this,Subjects_List.class));
                 openSubjectList();
             }
         });
@@ -156,12 +158,17 @@ public class AddMembers extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        int found = 1;
                         for (DocumentSnapshot querySnapshot: task.getResult()){
+                            if (found == 4){
+                                found = 1;
+                            }
                             Model_Member model_member = new Model_Member(querySnapshot.getString("member_id"),
                                     querySnapshot.get("member_name").toString(),
                                     querySnapshot.getId(),
-                                    document_name);
+                                    document_name,found);
                             item_List.add(model_member);
+                            found = found + 1;
                         }
                         member_recyclerview.setAdapter(new MemberAdapter(item_List, AddMembers.this));
                     }
@@ -179,5 +186,26 @@ public class AddMembers extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         finish();
         return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.list_member_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.getCSV:
+                Intent intent_new = new Intent(AddMembers.this,Past_Attendance.class);
+                intent_new.putExtra("document_name",document_name);
+                startActivity(intent_new);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

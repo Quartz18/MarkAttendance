@@ -86,11 +86,16 @@ public class Class_Fragment extends Fragment {
                         }
                         else {
                             item_List = new ArrayList<>();
+                            int found = 1;
                             for (DocumentSnapshot querySnapshot : value) {
+                                if (found == 4){
+                                    found = 1;
+                                }
                                 Model_Batch model_batch = new Model_Batch(querySnapshot.getString("Name"),
                                         userID,
-                                        querySnapshot.getId());
+                                        querySnapshot.getId(),found);
                                 item_List.add(model_batch);
+                                found = found + 1;
                             }
                             batch_recyclerview.setAdapter(new Class_Adapter(item_List, Class_Fragment.this));
                         }

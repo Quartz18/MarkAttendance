@@ -9,9 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.List;
 
 public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.ViewHolder> {
@@ -39,7 +37,16 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull AttendanceAdapter.ViewHolder holder, final int position) {
 
-        holder.batch_name.setText(item_List.get(position).getMembers_number());
+        if (item_List.get(position).getFound() == 1){
+            holder.go_to_tabs_items.setBackgroundResource(R.drawable.item_colour_1);
+        }
+        else if (item_List.get(position).getFound() == 2){
+            holder.go_to_tabs_items.setBackgroundResource(R.drawable.item_colour_2);
+        }
+        else {
+            holder.go_to_tabs_items.setBackgroundResource(R.drawable.item_colour_3);
+        }
+        holder.tab_name.setText(item_List.get(position).getMembers_number());
         holder.total_member.setText(item_List.get(position).getMembers_name());
         mAuth = FirebaseAuth.getInstance();
         userID = mAuth.getCurrentUser().getUid();
@@ -82,12 +89,12 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView batch_name;
+        TextView tab_name;
         TextView total_member;
         View go_to_tabs_items;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            batch_name = itemView.findViewById(R.id.batch_name);
+            tab_name = itemView.findViewById(R.id.tab_name);
             total_member = itemView.findViewById(R.id.total_member);
             go_to_tabs_items = itemView.findViewById(R.id.go_to_tabs_items);
         }

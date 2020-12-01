@@ -63,22 +63,22 @@ public class Edit_Member extends AppCompatDialogFragment {
                     }
                 });
         builder.setView(view)
-                .setTitle("Add Class")
+                .setTitle("Edit Student")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
                 })
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String name = member_name.getText().toString();
                         String id = member_id.getText().toString();
                         String device = device_name.getText().toString();
-                        if(TextUtils.isEmpty(name))
+                        if(TextUtils.isEmpty(name) || TextUtils.isEmpty(device) || TextUtils.isEmpty(id))
                         {
-                            Toast.makeText(getContext(),"Enter class name",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(),"Enter all the details.",Toast.LENGTH_SHORT).show();
                         }
                         else{
                             Map<String, Object> add_class_name = new HashMap<>();

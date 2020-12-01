@@ -55,28 +55,37 @@ public class SlideViewPagerAdapter extends PagerAdapter {
         switch (position)
         {
             case 0:
-                logo.setImageResource(R.drawable.signal1);
+                logo.setImageResource(R.drawable.image1);
                 indicator1.setImageResource(R.drawable.indicator_selected);
                 indicator2.setImageResource(R.drawable.indicator_unselected);
                 indicator3.setImageResource(R.drawable.indicator_unselected);
-                title.setText("Class and batches");
+                title.setText("Class, Student and" +
+                        " Subject");
+                desc.setText("You can see the list of class, students and subjects." +
+                        "You can add, edit and delete then anytime!");
                 break;
             case 1:
-                logo.setImageResource(R.drawable.file1);
+                logo.setImageResource(R.drawable.image2);
                 indicator1.setImageResource(R.drawable.indicator_unselected);
                 indicator2.setImageResource(R.drawable.indicator_selected);
                 indicator3.setImageResource(R.drawable.indicator_unselected);
-                title.setText("Attendance and Records");
+                title.setText("Attendance and" +
+                        " Records");
+                desc.setText("You can see the list of past records, take attendance of students." +
+                        "You can also download the csv file of the records anytime!");
                 break;
             case 2:
-                logo.setImageResource(R.drawable.stat2);
+                logo.setImageResource(R.drawable.image3);
                 indicator1.setImageResource(R.drawable.indicator_unselected);
                 indicator2.setImageResource(R.drawable.indicator_unselected);
                 indicator3.setImageResource(R.drawable.indicator_selected);
-                title.setText("Statistics");
+                title.setText("Performance and" +
+                        " Statistics");
                 btngetstarted.setVisibility(View.VISIBLE);
                 btngetstarted.setEnabled(true);
                 btngetstarted.setAnimation(btnanim);
+                desc.setText("You can see the performance of any student and analyze their performance through graph." +
+                        "Enjoy your Day!");
                 break;
         }
         container.addView(view);

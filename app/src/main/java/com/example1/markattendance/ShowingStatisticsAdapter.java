@@ -34,6 +34,15 @@ public class ShowingStatisticsAdapter extends RecyclerView.Adapter<ShowingStatis
     @Override
     public void onBindViewHolder(@NonNull final ShowingStatisticsAdapter.ViewHolder holder, final int position) {
 
+        if (item_List.get(position).getFound() == 1){
+            holder.statistics_member_item.setBackgroundResource(R.drawable.item_colour_1);
+        }
+        else if (item_List.get(position).getFound() == 2){
+            holder.statistics_member_item.setBackgroundResource(R.drawable.item_colour_2);
+        }
+        else {
+            holder.statistics_member_item.setBackgroundResource(R.drawable.item_colour_3);
+        }
         holder.statistics_member_id.setText(String.valueOf(item_List.get(position).getMember_id()));
         holder.statistics_member_name.setText(item_List.get(position).getMember_name());
         holder.statistics_percentage.setText(item_List.get(position).getMember_ratio());

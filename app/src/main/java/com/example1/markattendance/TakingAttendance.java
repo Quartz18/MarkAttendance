@@ -122,13 +122,18 @@ public class TakingAttendance extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        int found =1;
                         for (DocumentSnapshot querySnapshot: task.getResult()){
+                            if (found==4){
+                                found =1;
+                            }
                             id_list.add(querySnapshot.getString("member_id"));
                             Model_Attendance model_attendance = new Model_Attendance(querySnapshot.getString("member_id"),
                                     querySnapshot.get("member_name").toString(),
                                     id_list,
-                                    select_all_value);
+                                    select_all_value,found);
                             item_List.add(model_attendance);
+                            found =found+1;
                         }
                         take_attendance_recyclerview.setAdapter(takingAttendanceAdapter);
                     }

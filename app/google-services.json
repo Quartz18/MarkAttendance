@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "786275489232",
-    "firebase_url": "https://markattendance-8dc08.firebaseio.com",
-    "project_id": "markattendance-8dc08",
-    "storage_bucket": "markattendance-8dc08.appspot.com"
+    "project_number": "963358575455",
+    "firebase_url": "https://markattendance-1605694008208.firebaseio.com",
+    "project_id": "markattendance-1605694008208",
+    "storage_bucket": "markattendance-1605694008208.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:786275489232:android:2aaf8eef80a84ca47d95d5",
+        "mobilesdk_app_id": "1:963358575455:android:b4414d1844a5f761e144ea",
         "android_client_info": {
           "package_name": "com.example1.markattendance"
         }
       },
       "oauth_client": [
         {
-          "client_id": "786275489232-hjgaetbs472v9htvv417fj3tqvp8av8l.apps.googleusercontent.com",
+          "client_id": "963358575455-ra0mehr5aoqj0hfi5mf8c4c8m5b0um4n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example1.markattendance",
+            "certificate_hash": "bf6940ce999d91b587ddf0b3f1f0606b6ab4eae6"
+          }
+        },
+        {
+          "client_id": "963358575455-c0g5g4l50o8q6ck40ks0vsbo2tslk6i0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDASJg4KveF-LkvQJbePzJXjLDq_4leg7o"
+          "current_key": "AIzaSyAx06E-KUvfhL-eHsuYMRfCReK0ULznroc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "786275489232-hjgaetbs472v9htvv417fj3tqvp8av8l.apps.googleusercontent.com",
+              "client_id": "963358575455-c0g5g4l50o8q6ck40ks0vsbo2tslk6i0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -2,12 +2,22 @@ package com.example1.markattendance;
 
 public class Model_Past_Records {
     String past_record_name, member_id, member_name, member_attended;
+    int found;
 
-    public Model_Past_Records(String past_record_name, String member_id, String member_name, String member_attended) {
+    public Model_Past_Records(String past_record_name, String member_id, String member_name, String member_attended, int found) {
         this.past_record_name = past_record_name;
         this.member_id = member_id;
         this.member_name = member_name;
         this.member_attended = member_attended;
+        this.found = found;
+    }
+
+    public int getFound() {
+        return found;
+    }
+
+    public void setFound(int found) {
+        this.found = found;
     }
 
     public String getPast_record_name() {

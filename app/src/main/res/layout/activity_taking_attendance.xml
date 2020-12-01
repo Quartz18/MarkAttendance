@@ -20,27 +20,32 @@
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="70dp"
                 android:id="@+id/linearLayout2"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@drawable/item_colour_4"
+                android:layout_marginBottom="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="4dp">
                 <TextView
                     android:id="@+id/select_all_text"
-                    android:layout_width="300dp"
-                    android:layout_weight="2"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
                     android:paddingTop="15dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/white"
+                    android:layout_marginLeft="5dp"
                     android:text="Select All"
-                    android:fontFamily="@font/alegreya"
+                    android:fontFamily="serif"
                     android:textSize="20sp"
                     android:textStyle="bold" />
                 <CheckBox
                     android:id="@+id/select_all_check_box"
-                    android:layout_width="40dp"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_weight="6"
                     android:layout_height="match_parent"
-                    android:paddingTop="8dp" />
+                    android:buttonTint="@color/Green"
+                    android:paddingTop="15dp" />
             </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/take_attendance_recyclerview"
@@ -60,8 +65,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/coordinatorLayout2"
+        app:layout_constraintTop_toTopOf="@+id/coordinatorLayout3"
         app:layout_constraintVertical_bias="0.90"
         app:srcCompat="@drawable/ic_baseline_save_24"
-        android:backgroundTint="@color/dark_red"/>
+        android:backgroundTint="@color/red"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

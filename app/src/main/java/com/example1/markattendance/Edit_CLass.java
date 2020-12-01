@@ -51,20 +51,20 @@ public class Edit_CLass extends AppCompatDialogFragment {
                     }
                 });
         builder.setView(view)
-                .setTitle("Add Class")
+                .setTitle("Edit Class")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
                 })
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String name = class_name_text.getText().toString();
                         if(TextUtils.isEmpty(name))
                         {
-                            Toast.makeText(getContext(),"Enter class name",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(),"Enter the class name",Toast.LENGTH_SHORT).show();
                         }
                         else{
                             Map<String, Object> add_class_name = new HashMap<>();

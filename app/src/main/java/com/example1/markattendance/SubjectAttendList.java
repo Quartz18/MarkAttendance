@@ -63,14 +63,18 @@ public class SubjectAttendList extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        int q = 1;
+                        int q = 1,found=1;
                         for (DocumentSnapshot documentSnapshot: task.getResult()){
+                            if (found == 4){
+                                found = 1;
+                            }
                             Model_Member model_member = new Model_Member(documentSnapshot.getString("Name"),
                                     String.valueOf(q),
                                     document_name,
-                                    documentSnapshot.getId());
+                                    documentSnapshot.getId(),found);
                             q = q+1;
                             item_List.add(model_member);
+                            found = found +1;
                         }
                         subject_attend_Recyclerview.setAdapter(new SubjectAttendListAdapter(item_List,SubjectAttendList.this));
                     }

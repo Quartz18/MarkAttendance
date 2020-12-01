@@ -3,13 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="90dp"
-    android:background="@color/white"
-    android:id="@+id/go_to_tabs_items">
+    android:layout_height="70dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginRight="4dp"
+    android:layout_marginLeft="4dp"
+    android:layout_marginTop="4dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,33 +20,32 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:id="@+id/go_to_tabs_items">
 
             <TextView
-                android:id="@+id/batch_name"
-                android:layout_width="230dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@color/white"
+                android:id="@+id/tab_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:paddingTop="15dp"
                 android:text="Batch_name"
-                android:fontFamily="@font/alegreya"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_width="120dp"
-                android:layout_height="60dp"
-                android:paddingTop="10dp"
                 android:id="@+id/total_member"
-                android:background="@drawable/tab_unselected_indicator"
-                android:textAlignment="center"
-                android:fontFamily="@font/alegreya"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:textSize="20sp"
-                android:textColor="@color/white" />
+                android:fontFamily="serif"
+                android:textAlignment="center"
+                android:paddingTop="15dp"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

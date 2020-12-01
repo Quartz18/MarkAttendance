@@ -1,5 +1,7 @@
 package com.example1.markattendance;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -47,6 +49,15 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
     @Override
     public void onBindViewHolder(@NonNull final SubjectListAdapter.ViewHolder holder, final int position) {
         setUpFirebase();
+        if (item_List.get(position).getFound() == 1){
+            holder.item_list4.setBackgroundResource(R.drawable.item_colour_1);
+        }
+        else if (item_List.get(position).getFound() == 2){
+            holder.item_list4.setBackgroundResource(R.drawable.item_colour_2);
+        }
+        else {
+            holder.item_list4.setBackgroundResource(R.drawable.item_colour_3);
+        }
         holder.subject_name_item.setText(item_List.get(position).getBatch_name());
         holder.option_menu_subject.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +78,7 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
                                 editSubject.show(subjects_list.getSupportFragmentManager(),"addClassDialog");
                                 break;
                             case R.id.delete_subject:
-                                deleteSelectedRow(position);
+                                getAlertDialog(position);
                                 break;
                             default:
                                 break;
@@ -78,6 +89,25 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
                 popupMenu.show();
             }
         });
+    }
+
+    private void getAlertDialog(int position){
+        AlertDialog.Builder alert_dialog = new AlertDialog.Builder(subjects_list);
+        alert_dialog.setTitle("Are you sure?");
+        alert_dialog.setMessage("Deleting "+item_List.get(position).getBatch_name()+" subject will result in completely removing all the details of the subject.");
+        alert_dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteSelectedRow(position);
+            }
+        }).setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alertDialog = alert_dialog.create();
+        alertDialog.show();
     }
 
     private void deleteSelectedRow(final int position) {
@@ -122,10 +152,12 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
 
         TextView subject_name_item;
         public TextView option_menu_subject;
+        View item_list4;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            subject_name_item = itemView.findViewById(R.id.suject_name_item);
+            subject_name_item = itemView.findViewById(R.id.subject_name_item);
             option_menu_subject = itemView.findViewById(R.id.option_menu_subject);
+            item_list4 = itemView.findViewById(R.id.item_list4);
         }
     }
 }

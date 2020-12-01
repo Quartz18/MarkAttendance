@@ -4,12 +4,22 @@ public class Model_Member {
 
     String members_name, members_device;
     String members_number,document_name;
+    int found;
 
-    public Model_Member(String members_number, String members_name, String members_device,String document_name) {
+    public Model_Member(String members_number, String members_name, String members_device,String document_name,int found) {
         this.members_number = members_number;
         this.members_name = members_name;
         this.members_device = members_device;
         this.document_name = document_name;
+        this.found = found;
+    }
+
+    public int getFound() {
+        return found;
+    }
+
+    public void setFound(int found) {
+        this.found = found;
     }
 
     public String getMembers_name() {

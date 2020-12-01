@@ -45,6 +45,15 @@ public class TakingAttendanceAdapter extends RecyclerView.Adapter<TakingAttendan
     public void onBindViewHolder(@NonNull final TakingAttendanceAdapter.ViewHolder holder, final int position) {
 
         setUpFirebase();
+        if (item_List.get(position).getFound() == 1){
+            holder.item_list5.setBackgroundResource(R.drawable.item_colour_1);
+        }
+        else if (item_List.get(position).getFound() == 2){
+            holder.item_list5.setBackgroundResource(R.drawable.item_colour_2);
+        }
+        else {
+            holder.item_list5.setBackgroundResource(R.drawable.item_colour_3);
+        }
         selectedValues = new ArrayList<String>();
         holder.attendance_member_id.setText(String.valueOf(item_List.get(position).getAttendee_id()));
         holder.getAttendance_member_name.setText(item_List.get(position).getAttendee_name());
@@ -96,12 +105,14 @@ public class TakingAttendanceAdapter extends RecyclerView.Adapter<TakingAttendan
 
         TextView attendance_member_id,getAttendance_member_name;
         CheckBox attendance_member_checkbox;
+        View item_list5;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             attendance_member_id = itemView.findViewById(R.id.attendance_member_id);
             getAttendance_member_name = itemView.findViewById(R.id.attendance_member_name);
             attendance_member_checkbox = itemView.findViewById(R.id.attendance_member_checkbox);
+            item_list5 = itemView.findViewById(R.id.item_list5);
 
         }
     }

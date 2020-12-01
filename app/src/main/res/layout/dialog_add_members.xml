@@ -10,8 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Member ID"
-        android:fontFamily="@font/alegreya"
+        android:fontFamily="serif"
         android:textSize="20sp"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -24,8 +25,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Member Name"
-        android:fontFamily="@font/alegreya"
+        android:fontFamily="serif"
         android:textSize="20sp"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -33,29 +35,33 @@
         app:layout_constraintTop_toBottomOf="@+id/member_id_dialog"
         app:layout_constraintVertical_bias="0.044" />
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/device_name_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:hint="Members Details \n"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/member_name_dialog"
-        app:layout_constraintVertical_bias="0.053">
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/device_name_dialog"
-            android:hint="Members Details"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/connect"
-            android:text="Connect"
-            android:layout_marginLeft="10dp"
-            android:background="@color/dark_red"/>
-    </LinearLayout>
+        app:layout_constraintVertical_bias="0.045" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/connect"
+        android:text="Connect to Device"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_marginHorizontal="5dp"
+        android:background="@color/dark_orange"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/device_name_dialog"
+        app:layout_constraintVertical_bias="0.078"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -72,7 +72,7 @@ public class AddSubjectDialog extends AppCompatDialogFragment {
                         String name = subject_name_text.getText().toString();
                         if(TextUtils.isEmpty(name))
                         {
-                            Toast.makeText(getContext(),"Enter Subject name",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(),"Enter the Subject name",Toast.LENGTH_SHORT).show();
                         }
                         else{
                             Map<String, Object> add_counter = new HashMap<>();

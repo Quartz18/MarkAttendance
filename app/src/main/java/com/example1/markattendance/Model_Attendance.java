@@ -6,12 +6,22 @@ public class Model_Attendance {
     String attendee_id, attendee_name;
     ArrayList<String> attendee_details;
     Boolean attendance_select_all;
+    int found;
 
-    public Model_Attendance(String attendee_id, String attendee_name, ArrayList<String> attendee_details, Boolean attendance_select_all) {
+    public Model_Attendance(String attendee_id, String attendee_name, ArrayList<String> attendee_details, Boolean attendance_select_all,int found) {
         this.attendee_id = attendee_id;
         this.attendee_name = attendee_name;
         this.attendee_details = attendee_details;
         this.attendance_select_all = attendance_select_all;
+        this.found = found;
+    }
+
+    public int getFound() {
+        return found;
+    }
+
+    public void setFound(int found) {
+        this.found = found;
     }
 
     public String getAttendee_id() {

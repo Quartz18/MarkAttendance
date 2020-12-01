@@ -11,17 +11,16 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/aclonica"
         android:text="Login"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="50sp"
+        android:textSize="55sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.213" />
+        app:layout_constraintVertical_bias="0.14" />
 
     <EditText
         android:id="@+id/login_email"
@@ -62,11 +61,12 @@
         android:id="@+id/login_btn"
         android:layout_width="288dp"
         android:layout_height="50dp"
-        android:background="@drawable/getstarted_btn"
+        android:background="@drawable/login_sigin_button"
         android:text="Login"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -98,7 +98,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logged"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintVertical_bias="0.046" />
 
     <View
         android:id="@+id/line1"
@@ -142,8 +142,8 @@
         android:id="@+id/cardView"
         android:layout_width="288dp"
         android:layout_height="50dp"
-        app:cardCornerRadius="28dp"
-        android:background="#00000000"
+        app:cardCornerRadius="15dp"
+        android:background="@drawable/getstarted_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

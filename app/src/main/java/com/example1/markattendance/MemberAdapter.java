@@ -1,5 +1,7 @@
 package com.example1.markattendance;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,6 +59,15 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
     public void onBindViewHolder(@NonNull final MemberAdapter.ViewHolder holder, final int position) {
 
         setUpFirebase();
+        if (item_List.get(position).getFound() == 1){
+            holder.item_list3.setBackgroundResource(R.drawable.item_colour_1);
+        }
+        else if (item_List.get(position).getFound() == 2){
+            holder.item_list3.setBackgroundResource(R.drawable.item_colour_2);
+        }
+        else {
+            holder.item_list3.setBackgroundResource(R.drawable.item_colour_3);
+        }
 
         holder.members_number.setText(String.valueOf(item_List.get(position).getMembers_number()));
         holder.members_name.setText(item_List.get(position).getMembers_name());
@@ -80,9 +91,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
                                 editMember.show(addMembers.getSupportFragmentManager(),"addClassDialog");
                                 break;
                             case R.id.delete_member:
-//                                item_list.remove(position);
-                                deleteSelectedRow(position);
-//                                notifyDataSetChanged();
+                                getAlertDialog(position);
                                 break;
                             default:
                                 break;
@@ -100,6 +109,25 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         userID = mAuth.getCurrentUser().getUid();
+    }
+
+    private void getAlertDialog(int position){
+        AlertDialog.Builder alert_dialog = new AlertDialog.Builder(addMembers);
+        alert_dialog.setTitle("Are you sure?");
+        alert_dialog.setMessage("Deleting "+item_List.get(position).getMembers_name()+" student will result in completely removing all the details of the student.");
+        alert_dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteSelectedRow(position);
+            }
+        }).setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alertDialog = alert_dialog.create();
+        alertDialog.show();
     }
 
     private void deleteSelectedRow(final int position){
@@ -172,11 +200,13 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
         TextView members_number;
         TextView members_name;
         public TextView member_option_menu;
+        View item_list3;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             members_number = itemView.findViewById(R.id.members_number);
             members_name = itemView.findViewById(R.id.members_name);
             member_option_menu = itemView.findViewById(R.id.member_option_menu);
+            item_list3 = itemView.findViewById(R.id.item_list3);
         }
     }
 }
