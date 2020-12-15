@@ -30,8 +30,8 @@
         android:hint="Username"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textAlignment="center"
         android:textColorHint="#87ffffff"
+        android:paddingLeft="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -48,8 +48,8 @@
         android:inputType="textEmailAddress"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textAlignment="center"
         android:textColorHint="#87ffffff"
+        android:paddingLeft="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -57,24 +57,33 @@
         app:layout_constraintTop_toBottomOf="@+id/username"
         app:layout_constraintVertical_bias="0.055" />
 
-    <EditText
-        android:id="@+id/editTextTextPassword"
-        android:layout_width="288dp"
-        android:layout_height="50dp"
-        android:background="@drawable/bg_input"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:textAlignment="center"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editTextTextPassword_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textColorHint="#87ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_login"
-        app:layout_constraintVertical_bias="0.063" />
+        app:layout_constraintVertical_bias="0.028"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="#87ffffff">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextTextPassword"
+            android:layout_width="288dp"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_input"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:paddingLeft="5dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/button"
@@ -90,7 +99,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword_layout"
         app:layout_constraintVertical_bias="0.109" />
 
     <TextView

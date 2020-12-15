@@ -1,30 +1,48 @@
 package com.example1.markattendance;
 
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
+import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,11 +53,17 @@ public class Dashboard extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseFirestore db;
-    String userID, user_name, user_mail,document_name,class_name;
+    FirebaseUser firebaseUser;
+    StorageReference storageReference;
+    GoogleSignInClient mGoogleSignInClient;
+    String userID, user_name, user_mail,class_name;
     List<String> list_of_class;
     TextView current_user_name, current_user_mail;
-    Button log_out, delete_account;
-    List<String> list_of_past_records=new ArrayList<>();
+    Button log_out;
+    FirebaseStorage storage;
+    int TAKE_IMAGE_CODE = 22;
+    ImageView profileImageView, show_off;
+    Uri image_uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +71,48 @@ public class Dashboard extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setUpFirebase();
+        setUpWidgets();
+        if (firebaseUser.getPhotoUrl()!=null){
+            Glide.with(this)
+                    .load(firebaseUser.getPhotoUrl())
+                    .error(R.drawable.profile_bg)
+                    .into(profileImageView);
+        }
+        storageReference.child("profileImages/"+userID+".jpg")
+                .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(Dashboard.this)
+                        .load(uri)
+                        .error(R.drawable.profile_bg)
+                        .into(profileImageView);
+            }
+        });
+        log_out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAlertDialog();
+            }
+        });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        db.collection("users").document(userID)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error !=null){
+                            return;
+                        }
+                        setUpValues();
+                    }
+                });
+    }
+
+    private void setUpValues(){
         db.collection("users").document(userID)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -54,8 +120,8 @@ public class Dashboard extends AppCompatActivity {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         user_name = documentSnapshot.getString("Name");
                         user_mail = documentSnapshot.getString("Email");
-                        current_user_name.setText("Name: "+user_name);
-                        current_user_mail.setText("Account: "+user_mail);
+                        current_user_name.setText(user_name);
+                        current_user_mail.setText(user_mail);
                         class_name = documentSnapshot.getString("List");
                         if (class_name.equals("")){
                             Log.d("usermail", user_mail);
@@ -67,33 +133,27 @@ public class Dashboard extends AppCompatActivity {
 
                     }
                 });
-        setUpWidgets();
-
-        log_out.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getAlertDialog();
-            }
-        });
-//        delete_account.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getAlertDialog();
-//            }
-//        });
-
     }
 
     private void setUpFirebase(){
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mAuth.getCurrentUser().getUid();
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("963358575455-h6ul90gluen8dom3ae1fksf8o5h7emf0.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(Dashboard.this, gso);
     }
     private void setUpWidgets(){
         current_user_name = findViewById(R.id.current_user_name);
         current_user_mail = findViewById(R.id.current_user_mail);
+        profileImageView = findViewById(R.id.profileimage);
         log_out = findViewById(R.id.current_user_log_out);
-        //delete_account = findViewById(R.id.current_user_delete);
+        show_off = findViewById(R.id.show_off);
     }
 
     private void getAlertDialog(){
@@ -104,6 +164,20 @@ public class Dashboard extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mAuth.signOut();
+                GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(Dashboard.this);
+                if (account !=null){
+                    mGoogleSignInClient.signOut()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Intent i = new Intent(Dashboard.this,LoginActivity.class);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(i);
+                                    finish();
+                                }
+                            });
+                }
                 Intent i = new Intent(Dashboard.this,LoginActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -120,182 +194,78 @@ public class Dashboard extends AppCompatActivity {
         alertDialog.show();
     }
 
-//    private void getAlertDialog(){
-//        AlertDialog.Builder alert_dialog = new AlertDialog.Builder(Dashboard.this);
-//        alert_dialog.setTitle("Are you sure?");
-//        alert_dialog.setMessage("Deleting this account will result in completely removing the account from the system and the user "+
-//                user_name+" won't be able to access the application.");
-//        alert_dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                deleteUser();
-//            }
-//        }).setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//        AlertDialog alertDialog = alert_dialog.create();
-//        alertDialog.show();
-//    }
-//
-//    private void deleteUser(){
-//        mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                if (task.isSuccessful()){
-//                    Toast.makeText(Dashboard.this,"Account Deleted!",
-//                            Toast.LENGTH_SHORT).show();
-//                    Intent i = new Intent(Dashboard.this,LoginActivity.class);
-//                    startActivity(i);
-//                    finish();
-//                }
-//            }
-//        });
-//
-//    }
-//    public void getListing(String tags){
-//        db.collection("users").document(userID)
-//                .get()
-//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        int count_of_class = Integer.parseInt(documentSnapshot.getString("count_of_class")) -1;
-//                        String list_of_class = documentSnapshot.getString("List");
-//                        String new_list_of_class = "-"+tags;
-//                        list_of_class = list_of_class.replaceAll(new_list_of_class,"");
-//                        Map<String, Object> counting_class = new HashMap<>();
-//                        DocumentReference class_list = db.collection("users").document(userID);
-//                        counting_class.put("count_of_class",String.valueOf(count_of_class));
-//                        counting_class.put("List",list_of_class);
-//                        class_list.update(counting_class);
-//
-//                    }
-//                });
-//        db.collection("users").document(userID)
-//                .collection("Class_List").document(tags)
-//                .get()
-//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        String past_records_string = documentSnapshot.getString("List");
-//                        if (past_records_string.equals("")){
-//                            deleteSelectedRow(tags);
-//                        }
-//                        else{
-//                            String[] list1 = past_records_string.split("-");
-//                            list_of_past_records = Arrays.asList(list1);
-//                            Log.d("Listing", past_records_string.toString());
-//                            deleteSelectedRow(tags);
-//                        }
-//                    }
-//                });
-//
-//
-//    }
-//    private void deleteSelectedRow(String tags){
-//        document_name =  tags+" "+ userID;
-//        db.collection(document_name)
-//                .get()
-//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                        WriteBatch writeBatch = FirebaseFirestore.getInstance().batch();
-//                        List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
-//                        for (DocumentSnapshot documentSnapshot: snapshotList){
-//                            writeBatch.delete(documentSnapshot.getReference());
-//                        }
-//                        writeBatch.commit()
-//                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                    @Override
-//                                    public void onSuccess(Void aVoid) {
-//                                        Log.d("Deletion","SuccessFull");
-//                                    }
-//                                })
-//                                .addOnFailureListener(new OnFailureListener() {
-//                                    @Override
-//                                    public void onFailure(@NonNull Exception e) {
-//                                        Log.d("Deletion",e.toString());
-//                                    }
-//                                });
-//                    }
-//                });
-//        db.collection("users").document(userID)
-//                .collection("Class_List").document(tags)
-//                .collection("Subjects")
-//                .get()
-//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                        WriteBatch writeBatch = FirebaseFirestore.getInstance().batch();
-//                        List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
-//                        for (DocumentSnapshot documentSnapshot: snapshotList){
-//                            writeBatch.delete(documentSnapshot.getReference());
-//                        }
-//                        writeBatch.commit()
-//                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                    @Override
-//                                    public void onSuccess(Void aVoid) {
-//                                        Log.d("Deletion","SuccessFull");
-//                                    }
-//                                })
-//                                .addOnFailureListener(new OnFailureListener() {
-//                                    @Override
-//                                    public void onFailure(@NonNull Exception e) {
-//                                        Log.d("Deletion",e.toString());
-//                                    }
-//                                });
-//                    }
-//                });
-//        db.collection("users").document(userID)
-//                .collection("Class_List").document(tags)
-//                .delete()
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Toast.makeText(Dashboard.this, "Deleted", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//        if (list_of_past_records.size()>1) {
-//            getpastlistdelete(tags);
-//        }
-//    }
-//
-//    public void getpastlistdelete(String tags1){
-//        int q = 0;
-//        for (String tags: list_of_past_records){
-//            if (q == 0){
-//                q = 1;
-//                continue;
-//            }
-//            db.collection("Records").document(document_name).collection(tags)
-//                    .get()
-//                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                        @Override
-//                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                            WriteBatch writeBatch = FirebaseFirestore.getInstance().batch();
-//                            List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
-//                            for (DocumentSnapshot documentSnapshot: snapshotList){
-//                                writeBatch.delete(documentSnapshot.getReference());
-//                            }
-//                            writeBatch.commit()
-//                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                        @Override
-//                                        public void onSuccess(Void aVoid) {
-//                                            Log.d("Deletion","SuccessFull");
-//                                        }
-//                                    })
-//                                    .addOnFailureListener(new OnFailureListener() {
-//                                        @Override
-//                                        public void onFailure(@NonNull Exception e) {
-//                                            Log.d("Deletion",e.toString());
-//                                        }
-//                                    });
-//                        }
-//                    });
-//        }
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.user_edit, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.user_edit_photo:
+                handleImageclick();
+                break;
+            case R.id.user_edit_name:
+                handleUsername();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private  void handleImageclick(){
+        Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(Intent.createChooser(intent, "Select profile picture...."),TAKE_IMAGE_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == TAKE_IMAGE_CODE && resultCode == RESULT_OK && data!=null){
+            image_uri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media
+                        .getBitmap(getContentResolver(),image_uri);
+                profileImageView.setImageBitmap(bitmap);
+                handleUpload(image_uri);
+            }catch (Exception exception){
+                exception.printStackTrace();
+            }
+
+        }
+    }
+
+    private void handleUpload(Uri image_uri) {
+        if (image_uri != null){
+            StorageReference reference = storageReference.child("profileImages/"+userID+".jpg");
+            reference.putFile(image_uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(Dashboard.this,"Profile is updated!",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            UserProfileChangeRequest request = new UserProfileChangeRequest.Builder()
+                    .setPhotoUri(image_uri)
+                    .build();
+            firebaseUser.updateProfile(request)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("updatePro","Hua");
+                        }
+                    });
+        }
+
+    }
+
+    private void handleUsername(){
+        Edit_Username edit_username = new Edit_Username();
+        edit_username.show(getSupportFragmentManager(),"EditUsername");
+    }
 
     @Override
     public boolean onSupportNavigateUp() {

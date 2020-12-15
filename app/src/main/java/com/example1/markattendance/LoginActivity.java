@@ -7,6 +7,7 @@ import androidx.cardview.widget.CardView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,11 +29,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -41,27 +45,31 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
 
     Button login_btn;
     Animation frombtn, fromtop;
-    EditText email, paswrd;
+    EditText email;
+    TextInputEditText paswrd;
+    TextInputLayout passwd_layout;
     TextView textview,logged_in, forgot_psd;
     CardView google_cardview;
     private FirebaseAuth mAuth;
     FirebaseFirestore db;
+    FirebaseUser firebaseUser;
     SignInButton signInButton;
     int RC_SIGN_IN = 0;
     GoogleSignInClient mGoogleSignInClient;
     Date date = new Date();
     String userID, username, user_email, dateToStr;
+    Uri image_uri;
 
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             startActivity(new Intent(LoginActivity.this, HomeScreen.class));
             finish();
 
@@ -95,33 +103,41 @@ public class LoginActivity extends AppCompatActivity {
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                        "[a-zA-Z0-9_+&*-]+)*@" +
+                        "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                        "A-Z]{2,7}$";
+                Pattern pat = Pattern.compile(emailRegex);
                 String txtemail=email.getText().toString();
                 String txtpassword=paswrd.getText().toString();
                 if(TextUtils.isEmpty(txtemail) || TextUtils.isEmpty(txtpassword))
                 {
-                    Toast.makeText(LoginActivity.this, "Fill all the entries!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this,
+                            "Fill all the entries!", Toast.LENGTH_SHORT).show();
+                }
+                else if (pat.matcher(txtemail).matches() == false){
+                    Toast.makeText(LoginActivity.this,
+                            "Please provide a Valid Address!", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
                     mAuth.signInWithEmailAndPassword(txtemail, txtpassword)
-                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                            .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                 @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful())
-                                    {
-                                        Toast.makeText(LoginActivity.this, "User logged in!", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(getApplicationContext(),HomeScreen.class));
-                                        finish();
-                                    }
-                                    else
-                                    {
-                                        Log.w("Log In", "Error",task.getException());
-                                        String txtemail=email.getText().toString();
-                                        Toast.makeText(LoginActivity.this,"User with "+txtemail+" does not exist.",Toast.LENGTH_SHORT).show();
-                                    }
+                                public void onSuccess(AuthResult authResult) {
+                                    Toast.makeText(LoginActivity.this,
+                                            "Welcome Back!",Toast.LENGTH_LONG).show();
+                                    startActivity(new Intent(getApplicationContext(),HomeScreen.class));
+                                    finish();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(LoginActivity.this,
+                                            e.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
-
                 }
             }
         });
@@ -188,13 +204,7 @@ public class LoginActivity extends AppCompatActivity {
             mAuth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    GoogleSignInAccount account = null;
-                    try {
-                        account = completedTask.getResult(ApiException.class);
-                        getUpdatedValues(account);
-                    } catch (ApiException e) {
-                        e.printStackTrace();
-                    }
+                    getUpdatedValues(account);
                 }
             });
         } catch (ApiException e) {
@@ -210,6 +220,7 @@ public class LoginActivity extends AppCompatActivity {
         userID = mAuth.getCurrentUser().getUid();
         username = account.getDisplayName();
         user_email = account.getEmail();
+        image_uri = account.getPhotoUrl();
         dateToStr = DateFormat.getDateTimeInstance().format(date);
         db.collection("users").document(userID)
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -230,6 +241,18 @@ public class LoginActivity extends AppCompatActivity {
                         user.put("List","");
                         user.put("Date",dateToStr);
                         documentReference.set(user);
+                        firebaseUser = mAuth.getCurrentUser();
+                        UserProfileChangeRequest request = new UserProfileChangeRequest.Builder()
+                                .setPhotoUri(image_uri)
+                                .setDisplayName(username)
+                                .build();
+                        firebaseUser.updateProfile(request)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("updateProfile", "onSuccess: Successfully");
+                                    }
+                                });
                         startActivity(new Intent(getApplicationContext(),HomeScreen.class));
                         finish();
                     }
@@ -248,11 +271,13 @@ public class LoginActivity extends AppCompatActivity {
         forgot_psd.startAnimation(frombtn);
         email.startAnimation(fromtop);
         textview.startAnimation(fromtop);
+        passwd_layout.startAnimation(fromtop);
         paswrd.startAnimation(fromtop);
 
     }
     public void setUpWidget(){
         login_btn = findViewById(R.id.login_btn);
+        passwd_layout = findViewById(R.id.login_password_layout);
         logged_in = findViewById(R.id.logged);
         email = findViewById(R.id.login_email);
         paswrd = findViewById(R.id.login_password);

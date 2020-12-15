@@ -22,8 +22,8 @@ public class PastAttendanceAdapter extends RecyclerView.Adapter<PastAttendanceAd
     Past_Attendance past_attendance;
     FirebaseFirestore db;
     FirebaseAuth mAuth;
-    DocumentReference documentReference;
-    String userID,document_name;
+    int colour =R.color.blue;
+    String userID;
 
     public PastAttendanceAdapter(ArrayList<Model_Past_Records> item_List, Past_Attendance past_attendance) {
         this.item_List = item_List;
@@ -59,6 +59,21 @@ public class PastAttendanceAdapter extends RecyclerView.Adapter<PastAttendanceAd
         holder.past_records_go_to_details.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (item_List.get(position).getFound() == 1){
+                    holder.past_records_go_to_details.setBackgroundColor(holder.past_records_go_to_details
+                            .getContext().getResources()
+                            .getColor(R.color.blue,null));
+                }
+                else if (item_List.get(position).getFound() == 2){
+                    holder.past_records_go_to_details.setBackgroundColor(holder.past_records_go_to_details
+                            .getContext().getResources()
+                            .getColor(R.color.Green,null));
+                }
+                else {
+                    holder.past_records_go_to_details.setBackgroundColor(holder.past_records_go_to_details
+                            .getContext().getResources()
+                            .getColor(R.color.yellow,null));
+                }
                 Intent intent_new = new Intent(past_attendance.getApplicationContext(), Past_Attendance_Details.class);
                 intent_new.putExtra("document_name",item_List.get(position).getMember_name());
                 intent_new.putExtra("record_name",item_List.get(position).getPast_record_name());

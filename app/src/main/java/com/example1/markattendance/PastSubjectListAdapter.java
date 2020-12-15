@@ -23,8 +23,7 @@ public class PastSubjectListAdapter extends RecyclerView.Adapter<PastSubjectList
     PastSubjectList pastSubjectList;
     FirebaseFirestore db;
     FirebaseAuth mAuth;
-    DocumentReference documentReference;
-    String userID,document_name;
+    String userID;
 
     public PastSubjectListAdapter(ArrayList<Model_Member> item_List, PastSubjectList pastSubjectList){
         this.item_List = item_List;
@@ -56,6 +55,21 @@ public class PastSubjectListAdapter extends RecyclerView.Adapter<PastSubjectList
         holder.past_subject_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (item_List.get(position).getFound() == 1){
+                    holder.past_subject_item.setBackgroundColor(holder.past_subject_item
+                            .getContext().getResources()
+                            .getColor(R.color.blue,null));
+                }
+                else if (item_List.get(position).getFound() == 2){
+                    holder.past_subject_item.setBackgroundColor(holder.past_subject_item
+                            .getContext().getResources()
+                            .getColor(R.color.Green,null));
+                }
+                else {
+                    holder.past_subject_item.setBackgroundColor(holder.past_subject_item
+                            .getContext().getResources()
+                            .getColor(R.color.yellow,null));
+                }
                 Intent intent = new Intent(pastSubjectList.getApplicationContext(), ShowingStatistics.class);
                 String document_name = item_List.get(position).getMembers_device()+" "+userID;
                 String subject_name = item_List.get(position).getDocument_name();

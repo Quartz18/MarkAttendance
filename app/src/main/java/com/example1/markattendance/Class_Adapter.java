@@ -76,9 +76,25 @@ public class Class_Adapter extends RecyclerView.Adapter<Class_Adapter.ViewHolder
             @Override
             public void onClick(View v) {
                 //mbatch.startActivity(new Intent(mbatch.getContext(), AddMembers.class));
+                if (item_List.get(position).getFound() == 1){
+                    holder.item_list2.setBackgroundColor(holder.item_list2
+                            .getContext().getResources()
+                            .getColor(R.color.blue,null));
+                }
+                else if (item_List.get(position).getFound() == 2){
+                    holder.item_list2.setBackgroundColor(holder.item_list2
+                            .getContext().getResources()
+                            .getColor(R.color.Green,null));
+                }
+                else {
+                    holder.item_list2.setBackgroundColor(holder.item_list2
+                            .getContext().getResources()
+                            .getColor(R.color.yellow,null));
+                }
                 Intent intent = new Intent(class_fragment.getContext(),AddMembers.class);
                 String document_name = item_List.get(position).getCount_of_subjects()+" "+userID;
                 intent.putExtra("document_name",document_name);
+                intent.putExtra("class_name",item_List.get(position).getBatch_name());
                 class_fragment.startActivity(intent);
             }
         });

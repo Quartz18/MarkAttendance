@@ -118,6 +118,7 @@ public class TakingAttendance extends AppCompatActivity {
         final ArrayList<String> id_list = new ArrayList<>();
         takingAttendanceAdapter = new TakingAttendanceAdapter(item_List, TakingAttendance.this);
         db.collection(document_name)
+                .orderBy("member_id")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

@@ -50,6 +50,7 @@ public class ShowingStatistics extends AppCompatActivity {
     }
     private void loadMembersFromFirestore(){
         db.collection(document_name)
+                .orderBy("member_id")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -69,7 +70,7 @@ public class ShowingStatistics extends AppCompatActivity {
                             float counting = Float.valueOf(querySnapshot.getString("counting"))/Float.valueOf(total_records)*100;
                             Model_Statistics model_statistics = new Model_Statistics(querySnapshot.getString("member_id"),
                                     querySnapshot.get("member_name").toString(),
-                                    String.format("%.02f",counting)+"%\n"+querySnapshot.getString("counting")+"/"+count_of_records,
+                                    String.format("%.02f",counting)+"\n"+querySnapshot.getString("counting")+"/"+count_of_records,
                                     document_name,
                                     record_list,
                                     querySnapshot.getString("stats_list"),found);
@@ -130,6 +131,7 @@ public class ShowingStatistics extends AppCompatActivity {
                     }
                 });
         db.collection(document_name)
+                .orderBy("member_id")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

@@ -12,7 +12,9 @@ import androidx.viewpager.widget.ViewPager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,42 +28,40 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class HomeScreen extends AppCompatActivity {
 
-    DrawerLayout drawerLayout;
-    ActionBarDrawerToggle toggle;
-    NavigationView navigationView;
     Toolbar toolbar;
     TabLayout tabLayout;
     TabItem batch, attendance, statistics;
     ViewPager home_viewpager;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
-    DocumentReference acct;
-    String userID, userName,userMail;
+    FirebaseStorage storage;
+    String userID,username,profile_valid="0";
+    FirebaseUser firebaseUser;
+    StorageReference storageReference;
+    Uri profile_image;
+    UserProfileChangeRequest request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
-        mAuth = FirebaseAuth.getInstance();
-        Toast.makeText(HomeScreen.this,mAuth.getCurrentUser().getUid(),Toast.LENGTH_LONG).show();
         toolbar = findViewById(R.id.home_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Attendance Taker");
-        tabLayout = findViewById(R.id.tabLayout);
-        batch = findViewById(R.id.class_frag);
-        attendance = findViewById(R.id.attendance_frag);
-        statistics = findViewById(R.id.statistics_frag);
-        home_viewpager = findViewById(R.id.home_viewpager);
-        HomeAdapter homeAdapter = new HomeAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, tabLayout.getTabCount());
-        home_viewpager.setAdapter(homeAdapter);
+        setUpFirebase();
+        setUpWidgets();
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -99,6 +99,24 @@ public class HomeScreen extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setUpFirebase(){
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
+        firebaseUser = mAuth.getCurrentUser();
+        userID = firebaseUser.getUid();
+        storageReference = storage.getReference();
+    }
+    private void setUpWidgets(){
+        tabLayout = findViewById(R.id.tabLayout);
+        batch = findViewById(R.id.class_frag);
+        attendance = findViewById(R.id.attendance_frag);
+        statistics = findViewById(R.id.statistics_frag);
+        home_viewpager = findViewById(R.id.home_viewpager);
+        HomeAdapter homeAdapter = new HomeAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, tabLayout.getTabCount());
+        home_viewpager.setAdapter(homeAdapter);
     }
 
 

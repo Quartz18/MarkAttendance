@@ -55,6 +55,21 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
         holder.go_to_tabs_items.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (itemlist1.get(position).getFound() == 1){
+                    holder.go_to_tabs_items.setBackgroundColor(holder.go_to_tabs_items
+                            .getContext().getResources()
+                            .getColor(R.color.blue,null));
+                }
+                else if (itemlist1.get(position).getFound() == 2){
+                    holder.go_to_tabs_items.setBackgroundColor(holder.go_to_tabs_items
+                            .getContext().getResources()
+                            .getColor(R.color.Green,null));
+                }
+                else {
+                    holder.go_to_tabs_items.setBackgroundColor(holder.go_to_tabs_items
+                            .getContext().getResources()
+                            .getColor(R.color.yellow,null));
+                }
                 final int count_of_subjects = Integer.valueOf(itemlist1.get(position).getMembers_device());
                 if (count_of_subjects>0){
                     openSubjectList(position);

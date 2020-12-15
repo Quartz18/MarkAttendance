@@ -48,9 +48,24 @@ public class SubjectAttendListAdapter extends RecyclerView.Adapter<SubjectAttend
         }
         holder.attendance_subject_id.setText(item_List.get(position).getMembers_name());
         holder.attendance_subject_name_item.setText(item_List.get(position).getMembers_number());
-        holder.attendance_subject_name_item.setOnClickListener(new View.OnClickListener() {
+        holder.subject_Attend_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (item_List.get(position).getFound() == 1){
+                    holder.subject_Attend_item.setBackgroundColor(holder.subject_Attend_item
+                            .getContext().getResources()
+                            .getColor(R.color.blue,null));
+                }
+                else if (item_List.get(position).getFound() == 2){
+                    holder.subject_Attend_item.setBackgroundColor(holder.subject_Attend_item
+                            .getContext().getResources()
+                            .getColor(R.color.Green,null));
+                }
+                else {
+                    holder.subject_Attend_item.setBackgroundColor(holder.subject_Attend_item
+                            .getContext().getResources()
+                            .getColor(R.color.yellow,null));
+                }
                 Intent intent = new Intent(subjectAttendList.getApplicationContext(),TakingAttendance.class);
                 intent.putExtra("document_name",item_List.get(position).getMembers_device());
                 intent.putExtra("subject_name",item_List.get(position).getDocument_name());

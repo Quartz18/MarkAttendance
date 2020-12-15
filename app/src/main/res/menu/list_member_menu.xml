@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/getCSV"
-        android:title="Read CSV file"
-        app:showAsAction="never"/>
+<!--    <item android:id="@+id/getCSV"-->
+<!--        android:title="Read CSV file"-->
+<!--        app:showAsAction="never"/>-->
 
     <item android:id="@+id/copyCSV"
         android:title="Copy CSV file"

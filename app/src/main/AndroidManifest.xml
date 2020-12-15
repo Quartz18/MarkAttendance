@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MarkAttendance">
         <activity android:name=".Dashboard"
-            android:label="Dashboard"></activity>
+            android:label="Profile"></activity>
         <activity
             android:name=".AdminPage"
             android:label="Admin Page" />

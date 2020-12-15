@@ -37,8 +37,10 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull AttendanceAdapter.ViewHolder holder, final int position) {
 
+
         if (item_List.get(position).getFound() == 1){
             holder.go_to_tabs_items.setBackgroundResource(R.drawable.item_colour_1);
+
         }
         else if (item_List.get(position).getFound() == 2){
             holder.go_to_tabs_items.setBackgroundResource(R.drawable.item_colour_2);
@@ -53,6 +55,21 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Vi
         holder.go_to_tabs_items.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (item_List.get(position).getFound() == 1){
+                    holder.go_to_tabs_items.setBackgroundColor(holder.go_to_tabs_items
+                            .getContext().getResources()
+                            .getColor(R.color.blue,null));
+                }
+                else if (item_List.get(position).getFound() == 2){
+                    holder.go_to_tabs_items.setBackgroundColor(holder.go_to_tabs_items
+                            .getContext().getResources()
+                            .getColor(R.color.Green,null));
+                }
+                else {
+                    holder.go_to_tabs_items.setBackgroundColor(holder.go_to_tabs_items
+                            .getContext().getResources()
+                            .getColor(R.color.yellow,null));
+                }
                 final int count_of_subjects = Integer.valueOf(item_List.get(position).getMembers_device());
                 if (count_of_subjects>0){
                     openSubjectList(position);

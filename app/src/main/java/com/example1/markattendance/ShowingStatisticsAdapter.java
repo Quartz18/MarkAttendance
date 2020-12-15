@@ -49,6 +49,21 @@ public class ShowingStatisticsAdapter extends RecyclerView.Adapter<ShowingStatis
         holder.statistics_member_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (item_List.get(position).getFound() == 1){
+                    holder.statistics_member_item.setBackgroundColor(holder.statistics_member_item
+                            .getContext().getResources()
+                            .getColor(R.color.blue,null));
+                }
+                else if (item_List.get(position).getFound() == 2){
+                    holder.statistics_member_item.setBackgroundColor(holder.statistics_member_item
+                            .getContext().getResources()
+                            .getColor(R.color.Green,null));
+                }
+                else {
+                    holder.statistics_member_item.setBackgroundColor(holder.statistics_member_item
+                            .getContext().getResources()
+                            .getColor(R.color.yellow,null));
+                }
                 Bundle args = new Bundle();
                 args.putString("document_name",item_List.get(position).getDocument_name());
                 args.putString("class_name",item_List.get(position).getClass_name());
@@ -57,12 +72,6 @@ public class ShowingStatisticsAdapter extends RecyclerView.Adapter<ShowingStatis
                 GraphBottomSheet graphBottomSheet = new GraphBottomSheet();
                 graphBottomSheet.setArguments(args);
                 graphBottomSheet.show(showingStatistics.getSupportFragmentManager(),"graphsheet");
-//                Intent new_intent = new Intent(showingStatistics.getApplicationContext(),GraphBottomSheet.class);
-//                new_intent.putExtra("document_name",item_List.get(position).getDocument_name());
-//                new_intent.putExtra("class_name",item_List.get(position).getClass_name());
-//                new_intent.putExtra("member_id",item_List.get(position).getMember_id());
-//                new_intent.putExtra("member_name",item_List.get(position).getMember_name());
-//                showingStatistics.getApplicationContext().startActivity(new_intent);
             }
         });
     }
